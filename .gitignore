@@ -1,0 +1,5 @@
+.env
+venv/
+*.faiss
+__pycache__/
+.DS_Store
