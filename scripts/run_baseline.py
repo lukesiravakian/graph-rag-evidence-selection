@@ -9,8 +9,8 @@ for record in data:
     answer = generate_answer(record["question"], passages) 
     predictions.append(answer) 
     golds.append(record["answer"])
-    results = evaluate(predictions, golds)
-    print(results)
+results = evaluate(predictions, golds)
+print(results)
 with open("results/baseline_week1.json", "w") as f:
     json.dump({
             "results": results, 
