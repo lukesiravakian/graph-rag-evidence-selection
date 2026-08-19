@@ -106,3 +106,8 @@ package-lock.json.bak
 tmp/
 temp/
 __pycache__
+venv/
+*.faiss
+__pycache__/
+.DS_Store
+data/source_repo/
