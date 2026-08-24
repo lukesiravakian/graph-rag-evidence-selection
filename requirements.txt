@@ -1,0 +1,8 @@
+datasets
+sentence-transformers
+faiss-cpu
+numpy
+pandas
+tqdm
+python-dotenv
+google-genai
