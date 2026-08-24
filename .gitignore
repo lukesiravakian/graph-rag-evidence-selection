@@ -111,3 +111,6 @@ venv/
 __pycache__/
 .DS_Store
 data/source_repo/
+
+
+ retriever/id_map.json
