@@ -1,9 +1,3 @@
-
-
-
-
-
-
 def retrieval_metrics(retrieved_ids, gold_ids):
     retrieved_set = set(retrieved_ids)
     gold_set = set(gold_ids)
@@ -25,6 +19,3 @@ def evaluate(all_retrieved_ids, all_gold_ids):
     avg_recall = sum(r["recall"] for r in results) / len(results)
    
     return {"precision@k": avg_precision, "recall@k": avg_recall}
-
-
-
