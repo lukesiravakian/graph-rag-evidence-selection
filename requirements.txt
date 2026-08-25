@@ -1,7 +1,9 @@
+torch==2.2.2
+numpy<2
+sentence-transformers<6
+transformers<5
+faiss-cpu==1.10.0
 datasets
-sentence-transformers
-faiss-cpu
-numpy
 pandas
 tqdm
 python-dotenv
