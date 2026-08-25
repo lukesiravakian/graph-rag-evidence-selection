@@ -24,7 +24,7 @@ Evaluation run outputs. One JSON file per run, written by `scripts/run_baseline.
 ```bash
 python retriever/build_index.py
 ```
-
+or
 ```bash
 python scripts/run_baseline.py --data data/hotpotqa_dev_300.jsonl \
                                --output results/baseline_week1.json --k 5
