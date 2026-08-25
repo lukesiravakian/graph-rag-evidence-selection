@@ -20,10 +20,6 @@ from pathlib import Path
 from typing import Any
 
 from tqdm import tqdm
-
-# This script lives in scripts/, so running it directly puts scripts/ on
-# sys.path instead of the project root, and the local packages below are not
-# importable. Put the project root first so the script works from any cwd.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -54,7 +50,7 @@ def setup_logging(log_level: str = "INFO") -> None:
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
-    """Load a JSONL file, raising a clear error if it's missing or malformed."""
+    """Load a JSONL file, raising an error if it's missing or malformed."""
     if not path.exists():
         raise FileNotFoundError(f"Data file not found: {path}")
 
