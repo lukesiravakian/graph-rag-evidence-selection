@@ -1,7 +1,4 @@
 import json
-# NOTE: import sentence-transformers (and therefore torch) BEFORE faiss.
-# Both ship their own libomp; on macOS x86_64 loading faiss's copy first
-# corrupts the OpenMP runtime and the process dies with SIGSEGV mid-encode.
 from sentence_transformers import SentenceTransformer
 import faiss
 
