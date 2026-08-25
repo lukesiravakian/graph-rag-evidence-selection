@@ -105,12 +105,17 @@ package-lock.json.bak
 .history/
 tmp/
 temp/
-__pycache__
-venv/
-*.faiss
+
+# Python
 __pycache__/
-.DS_Store
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+venv/
+.venv/
+
+# Project artifacts
 data/source_repo/
 retriever/id_map.json
-
- retriever/id_map.json
+*.faiss
