@@ -1,0 +1,29 @@
+{
+  "results": {
+    "precision@k": 0.2331448214321471,
+    "recall@k": 0.9362906273620559
+  },
+  "predictions": [
+    "Yes, both Scott Derrickson and Ed Wood were American filmmakers, so they were of the same nationality. Note that the provided code context (which includes functions like `_basic_auth_str` and `get_encoding_from_headers`) does not contain information about either person.",
+    "The provided code context (which includes functions like `get_policy` and `_encode_params`) does not contain information about this film. However, Shirley Temple portrayed Corliss Archer in *Kiss and Tell* and later served as a U.S. Ambassador (to Ghana and Czechoslovakia) and Chief of Protocol of the United States.",
+    "The provided code context (featuring functions like `get_netrc_auth`, `list_domains`, and `mount`) does not contain information about literature, but the book series you are referring to is *Animorphs* by K. A. Applegate (along with its companion *Chronicles* books).",
+    "The provided code context only includes functions and classes related to HTTP request handling such as `is_redirect`, `multiple_domains`, and `TooManyRedirects`. As a result, it does not contain any geographical information about the Laleli Mosque or Esma Sultan Mansion.",
+    "The provided code context (which includes functions like `iter_lines`, `get_connection`, and `address_in_network`) does not contain information about the movie \"Big Stone Gap\". However, its director, Adriana Trigiani, is based in New York City.",
+    "The provided code context, which includes functions like `json`, `guess_json_utf`, and `stream_decode_response_unicode`, does not contain information about music albums. However, *2014 S/S* is the debut album of the South Korean boy group WINNER, which was formed by YG Entertainment.",
+    "Based on the provided code context, which only contains Python code functions like `is_redirect`, `items`, `__eq__`, and `__getitem__`, there is no information regarding Random House Tower or 888 7th Avenue.",
+    "The provided code context (which includes functions like `init_poolmanager` and `head`) does not contain information about football managers. However, Sir Alex Ferguson, who recruited David Beckham to Manchester United, managed the club from 1986 to 2013.",
+    "The provided code context, which includes functions such as `__setstate__`, `__getstate__`, and `init_poolmanager`, does not contain information about Brown State Fishing Lake. Brown State Fishing Lake is located in the United States, which has a population of approximately 335 million inhabitants.",
+    "The provided code context, which includes functions such as `parse_list_header` and `list_domains`, does not contain information about the Vermont Catamounts men's soccer team or its conference history. (Outside of the context, the team competes in the America East Conference, which was known as the North Atlantic Conference from 1988 to 1996.)",
+    "The provided code context (which includes functions and classes such as `cert_verify` and `SSLError`) does not contain any information about Giuseppe Verdi or Ambroise Thomas. Outside of this context, yes, both Giuseppe Verdi and Ambroise Thomas are well-known 19th-century opera composers.",
+    "The provided code context (which includes functions like `get_header`, `links`, and `__call__`) does not contain information about Roger O. Egeberg. However, Egeberg served under President Richard Nixon, who held office from 1969 to 1974.",
+    "The provided code context (containing functions like `_basic_auth_str` and `text`, and classes like `HTTPBasicAuth`) does not contain information about these authors, but Robert Erskine Childers was born in England. Henry Roth was an American novelist born in Austria-Hungary.",
+    "The provided code context (which includes functions like `get_netrc_auth` and `list_domains`) does not contain information about Formula One drivers. However, Pedro Rodr\u00edguez is the only other Mexican Formula One driver to have achieved podium finishes alongside Sergio P\u00e9rez.",
+    "The provided code context (which includes functions like `morsel_to_cookie` and `_basic_auth_str`) does not contain information about singers or voice actors. Outside of the",
+    "The provided code context (featuring functions and classes like `to_key_val_list`, `SupportsItems`, and `items`) does not contain information regarding the Apple Remote. Outside of",
+    "Badly Drawn Boy has a higher instrument-to-person ratio as a solo multi-instrumentalist compared to Wolf Alice, which is a four-member band. Note that the provided code context (containing functions and classes like `merge_setting`, `DataKwargs`, and `_find`) does not contain information about these musical acts.",
+    "The provided code context (which includes functions like `iter_lines` and `get_host`) does not contain information about Ralph Hefferline. However, Ralph Hefferline was a psychology professor at Columbia University, which is located in New York City.",
+    "The provided code context\u2014which includes utility functions like `cookiejar_from_dict` and `prepend_scheme_if_needed`\u2014does not contain any information about dog breeds. Outside of the code context, the Scotch Collie is the breed whose ancestors include Gordon and Irish Setters.",
+    "Based on the provided code context, there is no information about Sachin Warrier or the headquarters of the company he worked for. The context only contains networking and cookie utility functions such as `address_in_network` and `list_domains`.",
+    "The provided code context (which includes functions like `_get_idna_encoded_host` and classes like `ReadTimeout` or `ProxyError`) does not contain information about this manga series. However, the manga featuring 16-year-old Ichitaka Seto is *I\"s*, created by Masakazu Katsura, who was born in 1962."
+  ]
+}
