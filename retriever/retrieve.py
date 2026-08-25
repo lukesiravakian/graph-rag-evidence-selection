@@ -1,6 +1,9 @@
 import json
-import faiss
+# NOTE: import sentence-transformers (and therefore torch) BEFORE faiss.
+# Both ship their own libomp; on macOS x86_64 loading faiss's copy first
+# corrupts the OpenMP runtime and the process dies with SIGSEGV mid-encode.
 from sentence_transformers import SentenceTransformer
+import faiss
 
 PASSAGES_PATH = "data/code_passages.jsonl"
 INDEX_PATH = "retriever/passage_index.faiss"

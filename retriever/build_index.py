@@ -1,7 +1,7 @@
 import json
 import numpy as np
-import faiss
 from sentence_transformers import SentenceTransformer
+import faiss
 
 PASSAGES_PATH = "data/code_passages.jsonl"
 INDEX_PATH = "retriever/passage_index.faiss"
