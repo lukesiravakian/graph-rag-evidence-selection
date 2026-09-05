@@ -40,6 +40,9 @@ def retrieve(query, k=5):
     _, idxs = _index.search(q_emb, k)
     return [_passage_lookup[_id_map[i]] for i in idxs[0] if i != -1]
 
+def retrieve_candidates(query, n=15):
+    return retrieve(query, k=n)
+
 
 if __name__ == "__main__":
     QUESTIONS_PATH = "data/code_questions.jsonl"
