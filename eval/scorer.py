@@ -19,3 +19,13 @@ def evaluate(all_retrieved_ids, all_gold_ids):
     avg_recall = sum(r["recall"] for r in results) / len(results)
    
     return {"precision@k": avg_precision, "recall@k": avg_recall}
+
+
+def compare_methods(results_by_method):   
+     """    results_by_method: dict like {"top_k": (all_retrieved_ids, all_gold_ids), "mmr": (...), "facility_location": (...)}    Returns a dict of method_name -> {precision@k, recall@k}    """  
+     comparison = {}    
+     for method_name, (retrieved, golds) in results_by_method.items():  
+              comparison[method_name] = evaluate(retrieved, golds)
+     return comparison
+
+
