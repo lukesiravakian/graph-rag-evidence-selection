@@ -1,6 +1,10 @@
 import numpy as np
+from sentence_transformers import SentenceTransformer
 
-def build_similarity_graph(passages, model):
+def build_similarity_graph(
+    passages: list[dict[str, str]],
+    model: SentenceTransformer,
+) -> tuple[np.ndarray, np.ndarray]:
        """
        passages: list of passage dicts (each with a 'text' field)
        model: a loaded SentenceTransformer model
@@ -16,7 +20,6 @@ def build_similarity_graph(passages, model):
 
 
 if __name__ == "__main__":
-       from sentence_transformers import SentenceTransformer
        import json
 
        model = SentenceTransformer("all-mpnet-base-v2")

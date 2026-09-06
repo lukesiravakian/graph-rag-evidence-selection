@@ -1,6 +1,9 @@
 import numpy as np
 
-def facility_location_select(similarity_matrix, k=5):
+def facility_location_select(
+    similarity_matrix: np.ndarray,
+    k: int = 5,
+) -> list[int]:
     """
     Greedy facility location: at each step, pick the passage that most increases 
     total 'coverage' (how well every candidate is represented by something selected).

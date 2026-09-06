@@ -4,7 +4,7 @@ import json
 ds = load_dataset("hotpotqa/hotpot_qa", "distractor", split="validation")
 subset = ds.select(range(300))
 
-def flatten_passages(example, qid):
+def flatten_passages(example: dict, qid: str) -> list[dict]:
     passages = []
     titles = example["context"]["title"]
     sentences_list = example["context"]["sentences"]

@@ -11,7 +11,7 @@ def build_prompt(question: str, passages: list[dict]) -> str:
     context = "\n\n".join(f"# {p['title']}\n{p['text']}" for p in passages)
     return f"Code Context:\n{context}\n\nQuestion: {question}"
 
-def generate_answer(question: str, passages: list[dict]) -> str:
+def generate_answer(question: str, passages: list[dict[str, str]]) -> str:
     prompt = build_prompt(question, passages)
     
     response = client.models.generate_content(

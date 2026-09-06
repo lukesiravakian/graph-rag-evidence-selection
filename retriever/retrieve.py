@@ -33,14 +33,17 @@ except FileNotFoundError as e:
     raise RuntimeError(_BUILD_INDEX_MSG + f"\n(missing file: {e.filename})") from e
 
 
-def retrieve(query, k=5):
+def retrieve(query: str, k: int = 5) -> list[dict[str, str]]:
     k = min(k, _index.ntotal)
     q_emb = _model.encode([query]).astype("float32")
     faiss.normalize_L2(q_emb)
     _, idxs = _index.search(q_emb, k)
     return [_passage_lookup[_id_map[i]] for i in idxs[0] if i != -1]
 
-def retrieve_candidates(query, n=15):
+def retrieve_candidates(
+    query: str,
+    n: int = 15
+) -> list[dict[str, str]]:
     return retrieve(query, k=n)
 
 
