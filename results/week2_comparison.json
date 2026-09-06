@@ -1,0 +1,39 @@
+{
+  "comparison": {
+    "top_k": {
+      "precision@k": 0.14666666666666667,
+      "recall@k": 0.6
+    },
+    "mmr": {
+      "precision@k": 0.12000000000000002,
+      "recall@k": 0.6
+    },
+    "facility_location": {
+      "precision@k": 0.04,
+      "recall@k": 0.2
+    }
+  },
+  "predictions": {
+    "top_k": [
+      "`requests` uses the `extract_cookies_to_jar` function to pull cookies out of an incoming HTTP response. It wraps the response's original headers in a `MockResponse` object (and the request in a `MockRequest`) before passing them to `jar.extract_cookies()` to populate the `CookieJar`.",
+      "Requests removes a cookie across all domains and paths using the `remove_cookie_by_name` function (or via `RequestsCookieJar.__delitem__`). It iterates through the `CookieJar` to find all cookies matching the specified name, collects their domain and path details, and removes them by calling `cookiejar.clear(domain, path, name)`.",
+      "The `RequestsCookieJar` class provides a dict-like interface while remaining compatible with Python's `http.cookiejar.CookieJar`. It inherits from `CookieJar` and `MutableMapping` to support dictionary operations alongside standard cookie jar functionality.",
+      "Requests constructs a `Cookie` object by calling the `create_cookie` function with the given name and value. This helper function is used internally by methods like `RequestsCookieJar.set` and `cookiejar_from_dict` to convert key-value pairs into valid cookie instances.",
+      "Requests builds the HTTP Basic Auth header value by passing the username and password to the `_basic_auth_str` helper function. This function is invoked within the `__call__` method of the `HTTPBasicAuth` class (or when `prepare_auth` processes the request) to set the request's `Authorization` header."
+    ],
+    "mmr": [
+      "Requests uses the `extract_cookies_to_jar` function to pull cookies from an HTTP response into a `CookieJar`. It wraps the request and response header message in `MockRequest` and `MockResponse` objects, then calls `jar.extract_cookies(res, req)` to update the jar.",
+      "The `remove_cookie_by_name` function iterates through a `CookieJar` to collect the domain, path, and name of all cookies that match the specified name. It then removes each matching cookie by calling `cookiejar.clear(domain, path, name)` for every collected entry.",
+      "The `RequestsCookieJar` class gives requests' cookie jar a dict-like interface while maintaining compatibility with Python's `http.cookiejar.CookieJar`. It inherits from `CookieJar` and `MutableMapping`, allowing cookie management using both dictionary operations and standard cookie jar methods.",
+      "In `RequestsCookieJar.set()`, when given a name and string value, requests constructs a `Cookie` object by passing the name, value, and optional keyword arguments to the `create_cookie()` helper function. If a `Morsel` object is provided as the value instead, it uses `morsel_to_cookie()` to convert it.",
+      "In `requests`, the `HTTPBasicAuth` class (via its `__call__` method) and `proxy_headers` function pass the username and password to `_basic_auth_str` to generate the header value. This formatted string is then assigned to the request's `\"Authorization\"` or `\"Proxy-Authorization\"` header."
+    ],
+    "facility_location": [
+      "Based on the provided context, `requests` uses Python's `http.cookiejar.CookieJar` policy management by wrapping a `PreparedRequest` inside a `MockRequest` object to evaluate and set cookies correctly. The response's cookies are stored in a `CookieJar` (initialized via `cookiejar_from_dict`), allowing cookie headers to be parsed and managed according to domain policies.",
+      "Requests removes cookies using the `remove_cookie_by_name` function, which iterates through the provided `CookieJar` to locate all cookies matching the specified name. It collects their domain, path, and name into a list and then calls `cookiejar.clear(domain, path, name)` for each matching entry.",
+      "The `RequestsCookieJar` class provides a dict-like interface (including methods like `get_dict`) while maintaining compatibility with Python's standard `http.cookiejar.CookieJar`. It is instantiated as the default container for cookies in functions like `cookiejar_from_dict`.",
+      "Requests constructs a `Cookie` object from a name and value pair using the `create_cookie` function. This helper function is called internally when setting cookies via methods such as `RequestsCookieJar.set` or `cookiejar_from_dict`.",
+      "The `requests` library builds the HTTP Basic Auth header value by passing the username and password to the `_basic_auth_str` helper function. This function is called within the `HTTPBasicAuth.__call__` method to populate the `Authorization` header on a `PreparedRequest`, as well as in `proxy_headers` for proxy authentication."
+    ]
+  }
+}
