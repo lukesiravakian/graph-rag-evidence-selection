@@ -61,8 +61,7 @@ and the script writes:
 the final metrics are echoed to stdout before saving.
 
 Configuration lives in module constants at the top of the file — `INPUT_PATH`,
-`OUTPUT_PATH`, `K = 5`. There are no command-line flags; change the constants to
-change the run.
+`OUTPUT_PATH`, `K = 5`. There are no command-line flags.
 
 ## `run_comparison.py`
 
@@ -86,9 +85,15 @@ Each method's five passages get their own generated answer and their own score.
 }
 ```
 
-Unlike `run_baseline.py`, this script is written as top-level module code with no
-`main()` and no `if __name__ == "__main__"` guard — **importing it runs the whole
-experiment**. Its `k=5` and `n=15` are inline literals in the loop, not constants.
+Both scripts share the same shape: a `load_data` helper, the work in `main()`, and an
+`if __name__ == "__main__"` guard, so importing one no longer runs the experiment —
+though the module-level `from retriever.retrieve import ...` still loads the embedding
+model and the FAISS index at import time.
+
+Configuration is module constants at the top of the file — here `MODEL_NAME`, `K = 5`,
+`CANDIDATE_SIZE = 15`, `INPUT_PATH`, `OUTPUT_PATH` — and writing is factored out into
+`save_results()`. Neither script takes command-line flags; change the constants to
+change the run.
 
 ## Behaviour worth knowing
 
@@ -102,12 +107,12 @@ experiment**. Its `k=5` and `n=15` are inline literals in the loop, not constant
 - **Cost scales with methods.** `run_baseline.py` makes 18 generation calls;
   `run_comparison.py` makes 18 × 3 = **54**, because every method gets its own answer
   for every question.
-- **Duplicated embedding work in `run_comparison.py`.** It creates its own
-  `SentenceTransformer("all-mpnet-base-v2")` while `retriever/retrieve.py` already
-  holds one at module level, so the model sits in memory twice. Per question, the
-  15 candidate texts are encoded twice (once by `mmr_select`, once by
-  `build_similarity_graph`) and the query is encoded twice (once for `retrieve`, once
-  for `retrieve_candidates`). Correct, just slower than it needs to be.
+- **Duplicated embedding work in `run_comparison.py`.** `main()` builds its own
+  `SentenceTransformer(MODEL_NAME)`, but importing `retriever.retrieve` has already
+  loaded one at module level, so the same model sits in memory twice. Per question,
+  the 15 candidate texts are encoded twice (once by `mmr_select`, once by
+  `build_similarity_graph`) and the query three times (once each for `retrieve`,
+  `retrieve_candidates`, and `mmr_select`). Correct, just slower than it needs to be.
 - **Retrieved ids are not saved.** Only aggregate metrics and answer text reach the
   JSON, so per-question hit/miss analysis means re-running. `python
   retriever/retrieve.py` prints exactly that breakdown for the top-k baseline without
