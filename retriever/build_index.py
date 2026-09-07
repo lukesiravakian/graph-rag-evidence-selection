@@ -1,20 +1,23 @@
-import json
+from json import loads, dump
 import numpy as np
+from pathlib import Path
+
+
 from sentence_transformers import SentenceTransformer
 import faiss
 
-PASSAGES_PATH = "data/code_passages.jsonl"
-INDEX_PATH = "retriever/passage_index.faiss"
-ID_MAP_PATH = "retriever/id_map.json"
-MODEL_NAME = "all-mpnet-base-v2"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PASSAGES_PATH = PROJECT_ROOT / "data" / "code_passages.jsonl"
+INDEX_PATH = PROJECT_ROOT / "retriever" / "passage_index.faiss"
+ID_MAP_PATH = PROJECT_ROOT / "retriever" / "id_map.json"
+MODE_READ = "r"
+MODE_WRITE = "w"
 
-def build():
-    model=SentenceTransformer(MODEL_NAME)
-
-    with open(PASSAGES_PATH, "r", encoding="utf-8") as f:
-        passages = [json.loads(line) for line in f]
+def build(MODEL_NAME: str) -> None:
+    with open(PASSAGES_PATH, MODE_READ, encoding="utf-8") as f:
+        passages = [loads(line) for line in f]
     texts = [p["text"] for p in passages]
-    embeddings = model.encode(texts, show_progress_bar=True, batch_size=1)
+    embeddings = SentenceTransformer(MODEL_NAME).encode(texts, show_progress_bar=True, batch_size=1)
     embeddings = np.array(embeddings).astype("float32")
     faiss.normalize_L2(embeddings)
 
@@ -22,13 +25,12 @@ def build():
     index.add(embeddings)
 
     faiss.write_index(index, INDEX_PATH)
-    with open(ID_MAP_PATH, "w", encoding="utf-8") as f:
-        json.dump([p["passage_id"] for p in passages], f)
+    with open(ID_MAP_PATH, MODE_WRITE, encoding="utf-8") as f:
+        dump([p["passage_id"] for p in passages], f)
     
     print(f"Indexed {len(passages)} passages -> {INDEX_PATH}")
         
 if __name__ == "__main__":
-    build()
-        
-    
-    
+    build(
+        "all-mpnet-base-v2"
+    )
