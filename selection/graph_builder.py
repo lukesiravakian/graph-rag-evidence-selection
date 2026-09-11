@@ -1,5 +1,6 @@
 import numpy as np
 from sentence_transformers import SentenceTransformer
+from typing import Any
 
 def build_similarity_graph(
     passages: list[dict[str, str]],
@@ -31,11 +32,15 @@ if __name__ == "__main__":
        print("Symmetric check (should be True):", np.allclose(sim_matrix, sim_matrix.T))
 
 
-def compute_query_similarities(query, passages, model):
+def compute_query_similarities(
+       query: str, 
+       passages: list[dict], 
+       model: Any
+) -> np.ndarray:
        """Returns an array: how similar each passage is to the query itself."""
        texts = [p["text"] for p in passages]
        embeddings = np.array(model.encode(texts))
        query_embedding = np.array(model.encode([query])[0])
        norms = np.linalg.norm(embeddings, axis=1)
        query_norm = np.linalg.norm(query_embedding)
-       return (embeddings @ query_embedding) / (norms * query_norm)       
+       return (embeddings @ query_embedding) / (norms * query_norm)

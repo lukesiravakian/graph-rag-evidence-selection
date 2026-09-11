@@ -46,29 +46,34 @@ if __name__ == "__main__":
     print("Standalone test output indices:", selected)
 
 
-def relevance_weighted_facility_location_select(similarity_matrix, query_similarities, k=5, alpha=0.5):
-       """
-       alpha controls the balance: 0 = pure diversity (old behavior), 1 = pure relevance.
-       0.5 is a reasonable starting point.
-       """
-       n = similarity_matrix.shape[0]
-       selected = []
-       current_max = np.zeros(n)
+def relevance_weighted_facility_location_select(
+    similarity_matrix: np.ndarray, 
+    query_similarities: np.ndarray, 
+    k: int = 5, 
+    alpha: float = 0.5
+) -> list[int]:
+    """
+    alpha controls the balance: 0 = pure diversity (old behavior), 1 = pure relevance.
+    0.5 is a reasonable starting point.
+    """
+    n = similarity_matrix.shape[0]
+    selected = []
+    current_max = np.zeros(n)
 
-       for _ in range(k):
-           best_gain = -1
-           best_idx = -1
-           for i in range(n):
-               if i in selected:
-                   continue
-               new_max = np.maximum(current_max, similarity_matrix[i])
-               coverage_gain = new_max.sum() - current_max.sum()
-               relevance_bonus = query_similarities[i]
-               total_gain = (1 - alpha) * coverage_gain + alpha * relevance_bonus
-               if total_gain > best_gain:
-                   best_gain = total_gain
-                   best_idx = i
-           selected.append(best_idx)
-           current_max = np.maximum(current_max, similarity_matrix[best_idx])
+    for _ in range(k):
+        best_gain = -1
+        best_idx = -1
+        for i in range(n):
+            if i in selected:
+                continue
+            new_max = np.maximum(current_max, similarity_matrix[i])
+            coverage_gain = new_max.sum() - current_max.sum()
+            relevance_bonus = query_similarities[i]
+            total_gain = (1 - alpha) * coverage_gain + alpha * relevance_bonus
+            if total_gain > best_gain:
+                best_gain = total_gain
+                best_idx = i
+        selected.append(best_idx)
+        current_max = np.maximum(current_max, similarity_matrix[best_idx])
 
-       return selected    
+    return selected
