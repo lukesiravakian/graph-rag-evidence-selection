@@ -1,4 +1,15 @@
 {
+  "config": {
+    "model": "all-mpnet-base-v2",
+    "k": 5,
+    "candidate_size": 15,
+    "num_questions": 18,
+    "methods": [
+      "top_k",
+      "mmr",
+      "facility_location"
+    ]
+  },
   "comparison": {
     "top_k": {
       "precision@k": 0.162962962962963,

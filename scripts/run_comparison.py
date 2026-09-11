@@ -18,11 +18,15 @@ from selection.facility_location import facility_location_select
 from generator.generate import generate_answer
 from eval.scorer import compare_methods
 
+from typing import Any, TypedDict
+
 
 # Configuration
-MODEL_NAME = "all-mpnet-base-v2"
-K = 5
-CANDIDATE_SIZE = 15
+MODEL_NAME: str = "all-mpnet-base-v2"
+K: int = 5
+CANDIDATE_SIZE: int = 15
+
+METHODS: list[str] = ["top_k", "mmr", "facility_location"]
 
 INPUT_PATH = PROJECT_ROOT / "data" / "code_questions.jsonl"
 OUTPUT_PATH = PROJECT_ROOT / "results" / "week2_comparison.json"
@@ -33,16 +37,36 @@ def load_data(path: Path) -> list[dict]:
     with open(path, "r", encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
 
+class ConfigDict(TypedDict):
+    model: str
+    k: int
+    candidate_size: int
+    num_questions: int
+    methods: list[str]
+
+class ExperimentResultDict(TypedDict):
+    config: ConfigDict
+    comparison: Any
+    predictions: Any
+
 
 def save_results(
     path: Path,
     comparison: dict,
     predictions: dict,
+    num_questions: int
 ) -> None:
     """Save comparison results and generated predictions."""
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    output = {
+    output: ExperimentResultDict = {
+        "config": {
+            "model": MODEL_NAME,
+            "k": K,
+            "candidate_size": CANDIDATE_SIZE,
+            "num_questions": num_questions,
+            "methods": METHODS,
+        },
         "comparison": comparison,
         "predictions": predictions,
     }
@@ -64,7 +88,7 @@ def main() -> None:
         "facility_location": ([], []),
     }
 
-    predictions_by_method = {
+    predictions_by_method: dict[str, list[str]] = {
         "top_k": [],
         "mmr": [],
         "facility_location": [],
@@ -76,35 +100,17 @@ def main() -> None:
 
         print(f"\n[{i}/{len(data)}] Processing question...")
 
-        # Method 1: Plain Top-K retrieval
         top_k_passages = retrieve(question, k=K)
         top_k_ids = [p["passage_id"] for p in top_k_passages]
 
-        # Shared candidate pool for MMR and Facility Location
-        candidates = retrieve_candidates(
-            question,
-            n=CANDIDATE_SIZE,
-        )
+        candidates = retrieve_candidates(question, n=CANDIDATE_SIZE)
 
-        # Method 2: MMR selection
-        mmr_passages = mmr_select(
-            model,
-            question,
-            candidates,
-            k=K,
-        )
+        mmr_passages = mmr_select(model, question, candidates, k=K)
         mmr_ids = [p["passage_id"] for p in mmr_passages]
 
-        # Method 3: Facility Location selection
-        sim_matrix, _ = build_similarity_graph(
-            candidates,
-            model,
-        )
+        sim_matrix, _ = build_similarity_graph(candidates, model)
 
-        fl_indices = facility_location_select(
-            sim_matrix,
-            k=K,
-        )
+        fl_indices = facility_location_select(sim_matrix, k=K)
 
         fl_passages = [candidates[i] for i in fl_indices]
         fl_ids = [p["passage_id"] for p in fl_passages]
@@ -137,6 +143,7 @@ def main() -> None:
         OUTPUT_PATH,
         comparison,
         predictions_by_method,
+        len(data)
     )
 
     print(f"\nResults saved to: {OUTPUT_PATH}")
