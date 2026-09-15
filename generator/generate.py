@@ -7,6 +7,36 @@ from google.genai import types
 load_dotenv()
 client = genai.Client()
 
+def build_prompt_with_citations(question, passages):
+    context = "\n\n".join(f"[{i+1}] {p['title']}\n{p['text']}" for i, p in enumerate(passages))
+    id_key = "\n".join(f"[{i+1}] = {p['passage_id']}" for i, p in enumerate(passages))
+    return f"""You are answering a question about a codebase using the numbered code snippets below.
+
+Code context:
+{context}
+
+Passage ID key:
+{id_key}
+
+Question: {question}
+
+Answer concisely. After your answer, on a new line, write "CITATIONS:" followed by the passage ID(s) you actually used, separated by commas."""
+
+
+def generate_answer_with_citations(question, passages):
+    prompt = build_prompt_with_citations(question, passages)
+    response = client.models.generate_content(model="gemini-3.6-flash", contents=prompt)
+    text = response.text.strip()
+    
+    if "CITATIONS:" in text:
+        answer_part, citation_part = text.split("CITATIONS:", 1)
+        cited_ids = [c.strip() for c in citation_part.strip().split(",") if c.strip()]
+    else:
+        answer_part = text
+        cited_ids = []
+        
+    return answer_part.strip(), cited_ids
+
 def build_prompt(question: str, passages: list[dict]) -> str:
     context = "\n\n".join(f"# {p['title']}\n{p['text']}" for p in passages)
     return f"Code Context:\n{context}\n\nQuestion: {question}"
@@ -68,3 +98,19 @@ if __name__ == "__main__":
         result = generate_answer(dummy_question, dummy_passages)
         print(f"Question: {dummy_question}")
         print(f"Generated Answer: {result}")
+
+
+        if __name__ == "__main__":
+            import json
+    
+            with open("data/code_questions.jsonl", "r", encoding="utf-8") as f:
+                sample_q = json.loads(f.readline())
+                
+            with open("data/code_passages.jsonl", "r", encoding="utf-8") as f:
+                all_passages = {p["passage_id"]: p for p in [json.loads(line) for line in f]}
+                
+            sample_passages = [all_passages[pid] for pid in sample_q["gold_passage_ids"] if pid in all_passages]
+            
+            answer, cited_ids = generate_answer_with_citations(sample_q["question"], sample_passages)
+            print("Answer:", answer)
+            print("Cited IDs:", cited_ids)
