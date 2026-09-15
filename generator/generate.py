@@ -20,22 +20,46 @@ Passage ID key:
 
 Question: {question}
 
-Answer concisely. After your answer, on a new line, write "CITATIONS:" followed by the passage ID(s) you actually used, separated by commas."""
+Answer concisely. After your answer, on a new line, write "CITATIONS:" followed by the passage ID(s) you actually used, separated by commas.
+
+You must include the CITATIONS line in every response. Use only exact passage IDs from the Passage ID key; do not use the snippet numbers, brackets, or any other text."""
 
 
 def generate_answer_with_citations(question, passages):
     prompt = build_prompt_with_citations(question, passages)
-    response = client.models.generate_content(model="gemini-3.6-flash", contents=prompt)
-    text = response.text.strip()
-    
-    if "CITATIONS:" in text:
-        answer_part, citation_part = text.split("CITATIONS:", 1)
-        cited_ids = [c.strip() for c in citation_part.strip().split(",") if c.strip()]
-    else:
-        answer_part = text
-        cited_ids = []
-        
-    return answer_part.strip(), cited_ids
+    valid_ids = {passage["passage_id"] for passage in passages}
+
+    for attempt in range(2):
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.1,
+                max_output_tokens=1000,
+            ),
+        )
+        text = response.text.strip()
+
+        if "CITATIONS:" in text:
+            answer_part, citation_part = text.split("CITATIONS:", 1)
+            citation_line = citation_part.strip().splitlines()[0] if citation_part.strip() else ""
+            cited_ids = [
+                citation.strip()
+                for citation in citation_line.split(",")
+                if citation.strip() in valid_ids
+            ]
+        else:
+            answer_part = text
+            cited_ids = []
+
+        if cited_ids or attempt == 1:
+            return answer_part.strip(), cited_ids
+
+        prompt += (
+            "\n\nYour previous response did not contain a valid citation. "
+            "Rewrite the answer and end with `CITATIONS: ` followed by at least one "
+            "exact passage ID from the Passage ID key."
+        )
 
 def build_prompt(question: str, passages: list[dict]) -> str:
     context = "\n\n".join(f"# {p['title']}\n{p['text']}" for p in passages)
@@ -83,34 +107,24 @@ if __name__ == "__main__":
             questions = [json.loads(line) for line in f]
             
         print(f"Testing generator on {min(3, len(questions))} real code questions...\n")
-        
+
         for q in questions[:3]:
             gold_passages = [all_passages[pid] for pid in q["gold_passage_ids"] if pid in all_passages]
-            answer = generate_answer(q["question"], gold_passages)
+            answer, cited_ids = generate_answer_with_citations(q["question"], gold_passages)
             print(f"Q: {q['question']}")
-            print(f"A: {answer}\n" + "-" * 50)
+            print(f"A: {answer}")
+            print(f"CITATIONS: {', '.join(cited_ids) if cited_ids else 'None'}\n" + "-" * 50)
     else:
         dummy_passages = [
-            {"title": "sessions.py::Session.merge_environment_settings", "text": "def merge_environment_settings(self, url, proxies, stream, verify, cert):\n    if verify is None:\n        verify = self.verify\n    return {'verify': verify}"}
+            {
+                "passage_id": "sessions.py::Session.merge_environment_settings",
+                "title": "sessions.py::Session.merge_environment_settings",
+                "text": "def merge_environment_settings(self, url, proxies, stream, verify, cert):\n    if verify is None:\n        verify = self.verify\n    return {'verify': verify}",
+            }
         ]
         dummy_question = "How does requests decide whether to verify SSL certificates?"
         print("Testing Code-RAG Generator Standalone...")
-        result = generate_answer(dummy_question, dummy_passages)
+        answer, cited_ids = generate_answer_with_citations(dummy_question, dummy_passages)
         print(f"Question: {dummy_question}")
-        print(f"Generated Answer: {result}")
-
-
-        if __name__ == "__main__":
-            import json
-    
-            with open("data/code_questions.jsonl", "r", encoding="utf-8") as f:
-                sample_q = json.loads(f.readline())
-                
-            with open("data/code_passages.jsonl", "r", encoding="utf-8") as f:
-                all_passages = {p["passage_id"]: p for p in [json.loads(line) for line in f]}
-                
-            sample_passages = [all_passages[pid] for pid in sample_q["gold_passage_ids"] if pid in all_passages]
-            
-            answer, cited_ids = generate_answer_with_citations(sample_q["question"], sample_passages)
-            print("Answer:", answer)
-            print("Cited IDs:", cited_ids)
+        print(f"A: {answer}")
+        print(f"CITATIONS: {', '.join(cited_ids) if cited_ids else 'None'}")
