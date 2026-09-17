@@ -1,3 +1,5 @@
+from generator.generate import client
+
 def retrieval_metrics(retrieved_ids: list[str], gold_ids: list[str]) -> dict[str, float]:
     retrieved_set = set(retrieved_ids)
     gold_set = set(gold_ids)
@@ -37,3 +39,43 @@ def compare_methods(
     return comparison
 
 
+def citation_precision(cited_ids, provided_ids):
+    """Of the passages the model claimed to use, how many were actually real, provided passages?"""
+    if not cited_ids:
+        return 0.0
+    valid = [c for c in cited_ids if c in provided_ids]
+    return len(valid) / len(cited_ids)
+
+
+def check_hallucination(question, answer, passages):
+    context = "\n\n".join(
+        f"# {passage.get('title', 'Passage')}\n{passage['text']}"
+        for passage in passages
+    )
+    prompt = f"""Given this context:
+{context}
+
+Answer the question "{question}":
+{answer}
+
+Does the answer contain any claims not supported by the context above? Reply with only YES or NO."""
+
+    chat = client.chats.create(model="gemini-3.6-flash")
+    response = chat.send_message(prompt)
+    return response.text.strip().upper().startswith("YES")
+
+if __name__ == "__main__":
+    question = "How does requests decide whether to verify SSL certificates?"
+    answer = "When verify is None, requests uses the session's verify setting."
+    passages = [
+        {
+            "title": "sessions.py::Session.merge_environment_settings",
+            "text": """def merge_environment_settings(self, url, proxies, stream, verify, cert):
+    if verify is None:
+        verify = self.verify
+    return {'verify': verify}""",
+        }
+    ]
+
+    result = check_hallucination(question, answer, passages)
+    print(f"Hallucination detected: {result}")
