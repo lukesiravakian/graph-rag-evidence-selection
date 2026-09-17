@@ -48,7 +48,7 @@ from typing import TYPE_CHECKING
 
 __all__: list[str] = []
 
-#The runnable submodules, in the order they were added. 
+# The runnable submodules, in the order they were added. 
 # ``__dir__`` lists them and ``__getattr__`` imports them on demand; 
 # nothing here is loaded eagerly.
 ENTRY_POINTS: tuple[str, ...] = (
