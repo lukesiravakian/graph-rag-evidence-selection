@@ -57,7 +57,7 @@ ENTRY_POINTS: tuple[str, ...] = (
     "run_week3_comparison",
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover - for type checkers and IDEs only
     from scripts import run_baseline, run_comparison, run_week3_comparison
 
 
