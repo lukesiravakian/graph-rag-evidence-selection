@@ -119,3 +119,5 @@ venv/
 data/source_repo/
 retriever/id_map.json
 *.faiss
+
+.kilo/
