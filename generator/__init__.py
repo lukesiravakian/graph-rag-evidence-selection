@@ -19,10 +19,9 @@ from typing import TYPE_CHECKING, Any
 
 __all__ = ["build_prompt", "generate_answer"]
 
-# public name -> submodule that defines it
 _LAZY_ATTRS = {"build_prompt": "generate", "generate_answer": "generate"}
 
-if TYPE_CHECKING:  # pragma: no cover - for type checkers and IDEs only
+if TYPE_CHECKING:
     from generator.generate import build_prompt, generate_answer
 
 
@@ -31,7 +30,7 @@ def __getattr__(name: str) -> Any:
     if submodule is None:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     value = getattr(import_module(f".{submodule}", __name__), name)
-    globals()[name] = value  # cache: this hook runs once per name
+    globals()[name] = value
     return value
 
 
