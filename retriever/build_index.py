@@ -24,7 +24,7 @@ def build(MODEL_NAME: str) -> None:
     index=faiss.IndexFlatIP(embeddings.shape[1])
     index.add(embeddings)
 
-    faiss.write_index(index, INDEX_PATH)
+    faiss.write_index(index, str(INDEX_PATH))
     with open(ID_MAP_PATH, MODE_WRITE, encoding="utf-8") as f:
         dump([p["passage_id"] for p in passages], f)
     
