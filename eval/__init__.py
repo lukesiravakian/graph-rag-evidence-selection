@@ -19,10 +19,9 @@ from typing import TYPE_CHECKING, Any
 
 __all__ = ["evaluate"]
 
-# public name -> submodule that defines it
 _LAZY_ATTRS = {"evaluate": "scorer"}
 
-if TYPE_CHECKING:  # pragma: no cover - for type checkers and IDEs only
+if TYPE_CHECKING:
     from eval.scorer import evaluate
 
 
@@ -31,7 +30,7 @@ def __getattr__(name: str) -> Any:
     if submodule is None:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     value = getattr(import_module(f".{submodule}", __name__), name)
-    globals()[name] = value  # cache: this hook runs once per name
+    globals()[name] = value
     return value
 
 

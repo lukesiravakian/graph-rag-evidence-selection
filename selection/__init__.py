@@ -29,14 +29,13 @@ from typing import TYPE_CHECKING, Any
 
 __all__ = ["build_similarity_graph", "facility_location_select", "mmr_select"]
 
-# public name -> submodule that defines it
 _LAZY_ATTRS = {
     "build_similarity_graph": "graph_builder",
     "facility_location_select": "facility_location",
     "mmr_select": "mmr",
 }
 
-if TYPE_CHECKING:  # pragma: no cover - for type checkers and IDEs only
+if TYPE_CHECKING:
     from selection.facility_location import facility_location_select
     from selection.graph_builder import build_similarity_graph
     from selection.mmr import mmr_select
@@ -47,7 +46,7 @@ def __getattr__(name: str) -> Any:
     if submodule is None:
         raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     value = getattr(import_module(f".{submodule}", __name__), name)
-    globals()[name] = value  # cache: this hook runs once per name
+    globals()[name] = value
     return value
 
 
