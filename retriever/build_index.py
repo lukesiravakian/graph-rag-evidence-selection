@@ -23,7 +23,7 @@ def build(MODEL_NAME: str) -> None:
     index.add(embeddings)
 
     faiss.write_index(index, str(INDEX_PATH))
-    with open(ID_MAP_PATH, "w", encoding="utf-8") as f:
+    with open(ID_MAP_PATH, MODE_WRITE, encoding="utf-8") as f:
         dump([p["passage_id"] for p in passages], f)
     
     print(f"Indexed {len(passages)} passages -> {INDEX_PATH}")

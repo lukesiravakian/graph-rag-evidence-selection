@@ -1,0 +1,128 @@
+[
+  {
+    "qid": "q1",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.648507297039032,
+    "hit": 0
+  },
+  {
+    "qid": "q2",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6609410047531128,
+    "hit": 1
+  },
+  {
+    "qid": "q3",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6977711319923401,
+    "hit": 1
+  },
+  {
+    "qid": "q4",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6473840475082397,
+    "hit": 0
+  },
+  {
+    "qid": "q5",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6297354102134705,
+    "hit": 0
+  },
+  {
+    "qid": "q6",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.7009177207946777,
+    "hit": 1
+  },
+  {
+    "qid": "q7",
+    "density": 0.6,
+    "clustering_coefficient": 0.8,
+    "avg_pairwise_similarity": 0.5344995260238647,
+    "hit": 1
+  },
+  {
+    "qid": "q8",
+    "density": 0.8,
+    "clustering_coefficient": 0.8666666666666666,
+    "avg_pairwise_similarity": 0.5772792100906372,
+    "hit": 1
+  },
+  {
+    "qid": "q9",
+    "density": 0.7,
+    "clustering_coefficient": 0.7666666666666666,
+    "avg_pairwise_similarity": 0.5483771562576294,
+    "hit": 1
+  },
+  {
+    "qid": "q10",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6852632164955139,
+    "hit": 1
+  },
+  {
+    "qid": "q11",
+    "density": 0.9,
+    "clustering_coefficient": 0.9,
+    "avg_pairwise_similarity": 0.609199047088623,
+    "hit": 1
+  },
+  {
+    "qid": "q12",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6323987245559692,
+    "hit": 1
+  },
+  {
+    "qid": "q13",
+    "density": 0.4,
+    "clustering_coefficient": 0.4666666666666667,
+    "avg_pairwise_similarity": 0.4791685938835144,
+    "hit": 1
+  },
+  {
+    "qid": "q14",
+    "density": 0.9,
+    "clustering_coefficient": 0.9,
+    "avg_pairwise_similarity": 0.6154040098190308,
+    "hit": 1
+  },
+  {
+    "qid": "q15",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6302309632301331,
+    "hit": 1
+  },
+  {
+    "qid": "q16",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6250565052032471,
+    "hit": 0
+  },
+  {
+    "qid": "q17",
+    "density": 0.9,
+    "clustering_coefficient": 0.9,
+    "avg_pairwise_similarity": 0.6597166657447815,
+    "hit": 1
+  },
+  {
+    "qid": "q18",
+    "density": 1.0,
+    "clustering_coefficient": 1.0,
+    "avg_pairwise_similarity": 0.6599361300468445,
+    "hit": 0
+  }
+]
