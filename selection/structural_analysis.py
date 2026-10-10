@@ -1,9 +1,8 @@
 import numpy as np
 import networkx as nx
-from numpy.typing import NDArray
 
 def compute_subgraph_properties(
-    similarity_matrix: NDArray[np.float32],
+    similarity_matrix: np.ndarray,
     selected_idx: list[int],
     threshold: float = 0.5
 ) -> dict[str, float]:
