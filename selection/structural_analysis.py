@@ -1,7 +1,11 @@
 import numpy as np
 import networkx as nx
 
-def compute_subgraph_properties(similarity_matrix, selected_idx, threshold=0.5):
+def compute_subgraph_properties(
+    similarity_matrix: np.ndarray,
+    selected_idx: list[int],
+    threshold: float = 0.5
+) -> dict[str, float]:
     """
     similarity_matrix: full NxN candidate similarity matrix for this question
     selected_idx: indices of the passages actually selected by a given method

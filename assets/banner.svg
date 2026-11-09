@@ -1,0 +1,86 @@
+<svg viewBox="0 0 1200 260" width="1200" height="260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graph-Based Evidence Selection for Retrieval-Augmented Generation">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3730A3"/>
+      <stop offset="50%" stop-color="#6D28D9"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="260" rx="22" fill="url(#bg)"/>
+
+  <!-- soft ambient glow behind the graph motif -->
+  <circle cx="980" cy="130" r="220" fill="url(#glow)"/>
+
+  <!-- title block -->
+  <text x="54" y="100" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="42" font-weight="800" fill="#FFFFFF">Graph-Based Evidence Selection</text>
+  <text x="54" y="140" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="23" font-weight="600" fill="#E0E7FF">for Retrieval-Augmented Generation in LLMs</text>
+  <text x="54" y="178" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" fill="#C7D2FE">Diversity-aware retrieval &#183; graph optimization &#183; citation-faithful generation</text>
+
+  <!-- pill badges -->
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">
+    <rect x="56" y="196" width="118" height="28" rx="14" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)"/>
+    <text x="115" y="214" fill="#FFFFFF" text-anchor="middle">FAISS</text>
+    <rect x="182" y="196" width="168" height="28" rx="14" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)"/>
+    <text x="266" y="214" fill="#FFFFFF" text-anchor="middle">Sentence-Transformers</text>
+    <rect x="358" y="196" width="150" height="28" rx="14" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.35)"/>
+    <text x="433" y="214" fill="#FFFFFF" text-anchor="middle">Gemini Generator</text>
+  </g>
+
+  <!-- graph motif: candidate pool with a highlighted selected subset -->
+  <g stroke="rgba(255,255,255,0.38)" stroke-width="1.5">
+    <line x1="820" y1="60" x2="900" y2="40"/>
+    <line x1="900" y1="40" x2="980" y2="70"/>
+    <line x1="980" y1="70" x2="1050" y2="50"/>
+    <line x1="1050" y1="50" x2="1120" y2="90"/>
+    <line x1="820" y1="60" x2="840" y2="120"/>
+    <line x1="900" y1="40" x2="920" y2="140"/>
+    <line x1="980" y1="70" x2="1000" y2="130"/>
+    <line x1="1050" y1="50" x2="1080" y2="150"/>
+    <line x1="840" y1="120" x2="920" y2="140"/>
+    <line x1="920" y1="140" x2="1000" y2="130"/>
+    <line x1="1000" y1="130" x2="1080" y2="150"/>
+    <line x1="840" y1="120" x2="800" y2="180"/>
+    <line x1="920" y1="140" x2="880" y2="200"/>
+    <line x1="1000" y1="130" x2="960" y2="210"/>
+    <line x1="1080" y1="150" x2="1040" y2="220"/>
+    <line x1="800" y1="180" x2="880" y2="200"/>
+    <line x1="880" y1="200" x2="960" y2="210"/>
+    <line x1="960" y1="210" x2="1040" y2="220"/>
+    <line x1="1040" y1="220" x2="1110" y2="200"/>
+    <line x1="1080" y1="150" x2="1110" y2="200"/>
+  </g>
+
+  <!-- candidate (non-selected) nodes -->
+  <g fill="rgba(255,255,255,0.4)">
+    <circle cx="820" cy="60" r="5"/>
+    <circle cx="900" cy="40" r="5"/>
+    <circle cx="1050" cy="50" r="5"/>
+    <circle cx="1120" cy="90" r="5"/>
+    <circle cx="920" cy="140" r="5"/>
+    <circle cx="1000" cy="130" r="5"/>
+    <circle cx="800" cy="180" r="5"/>
+    <circle cx="960" cy="210" r="5"/>
+    <circle cx="1040" cy="220" r="5"/>
+  </g>
+
+  <!-- selected evidence subset: highlighted with a halo -->
+  <g>
+    <circle cx="980" cy="70" r="15" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="980" cy="70" r="7.5" fill="#FFFFFF"/>
+    <circle cx="840" cy="120" r="15" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="840" cy="120" r="7.5" fill="#FFFFFF"/>
+    <circle cx="1080" cy="150" r="15" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="1080" cy="150" r="7.5" fill="#FFFFFF"/>
+    <circle cx="880" cy="200" r="15" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="880" cy="200" r="7.5" fill="#FFFFFF"/>
+    <circle cx="1110" cy="200" r="15" fill="rgba(255,255,255,0.22)"/>
+    <circle cx="1110" cy="200" r="7.5" fill="#FFFFFF"/>
+  </g>
+
+  <text x="1115" y="245" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#C7D2FE" text-anchor="end">selected evidence subset</text>
+</svg>
