@@ -1,0 +1,1004 @@
+{
+  "config": {
+    "embedding_model": "all-mpnet-base-v2",
+    "num_candidates": 15,
+    "k": 5,
+    "alpha": 0.5,
+    "questions": 18
+  },
+  "by_step": [
+    {
+      "step": 1,
+      "coverage_gain_min": 9.387118220329285,
+      "coverage_gain_max": 11.97732698917389,
+      "relevance_min": 0.43766969442367554,
+      "relevance_max": 0.7381213903427124,
+      "ratio_min": 16.226771295183266,
+      "ratio_max": 24.988655361384858,
+      "questions_where_relevance_exceeds_coverage": 0,
+      "questions_within_factor_two": 0
+    },
+    {
+      "step": 2,
+      "coverage_gain_min": 0.5352282226085663,
+      "coverage_gain_max": 1.4424286782741547,
+      "relevance_min": 0.37014853954315186,
+      "relevance_max": 0.6678135991096497,
+      "ratio_min": 1.022550330369907,
+      "ratio_max": 3.2545419469177457,
+      "questions_where_relevance_exceeds_coverage": 0,
+      "questions_within_factor_two": 14
+    },
+    {
+      "step": 3,
+      "coverage_gain_min": 0.20707225799560547,
+      "coverage_gain_max": 0.9177406430244446,
+      "relevance_min": 0.430912584066391,
+      "relevance_max": 0.7747738361358643,
+      "ratio_min": 0.26726800562647457,
+      "ratio_max": 2.090238127883946,
+      "questions_where_relevance_exceeds_coverage": 9,
+      "questions_within_factor_two": 17
+    },
+    {
+      "step": 4,
+      "coverage_gain_min": 0.28231555223464966,
+      "coverage_gain_max": 0.49456334114074707,
+      "relevance_min": 0.3903184235095978,
+      "relevance_max": 0.6328957676887512,
+      "ratio_min": 0.4460695846736777,
+      "ratio_max": 1.1574540907988256,
+      "questions_where_relevance_exceeds_coverage": 14,
+      "questions_within_factor_two": 18
+    },
+    {
+      "step": 5,
+      "coverage_gain_min": 0.18759030103683472,
+      "coverage_gain_max": 0.48327457904815674,
+      "relevance_min": 0.38119226694107056,
+      "relevance_max": 0.6247865557670593,
+      "ratio_min": 0.3439680509282595,
+      "ratio_max": 1.2677974370420986,
+      "questions_where_relevance_exceeds_coverage": 16,
+      "questions_within_factor_two": 18
+    }
+  ],
+  "per_question": [
+    {
+      "qid": "q1",
+      "selected_ids": [
+        "data/source_repo/src/requests/cookies.py::MockRequest",
+        "data/source_repo/src/requests/cookies.py::cookiejar_from_dict",
+        "data/source_repo/src/requests/models.py::__init__",
+        "data/source_repo/src/requests/auth.py::handle_401",
+        "data/source_repo/src/requests/models.py::prepare_cookies"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 6,
+          "coverage_gain": 11.046697795391083,
+          "relevance": 0.5668661594390869,
+          "ratio": 19.48731214846512,
+          "score": 5.806781977415085
+        },
+        {
+          "step": 2,
+          "index": 3,
+          "coverage_gain": 1.1277946829795837,
+          "relevance": 0.6075036525726318,
+          "ratio": 1.856440991265887,
+          "score": 0.8676491677761078
+        },
+        {
+          "step": 3,
+          "index": 10,
+          "coverage_gain": 0.8982749581336975,
+          "relevance": 0.5496298670768738,
+          "ratio": 1.63432704796601,
+          "score": 0.7239524126052856
+        },
+        {
+          "step": 4,
+          "index": 9,
+          "coverage_gain": 0.3262402415275574,
+          "relevance": 0.5593407154083252,
+          "ratio": 0.5832585265841022,
+          "score": 0.4427904784679413
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.2542429566383362,
+          "relevance": 0.6214548945426941,
+          "ratio": 0.40910926741581827,
+          "score": 0.43784892559051514
+        }
+      ]
+    },
+    {
+      "qid": "q2",
+      "selected_ids": [
+        "data/source_repo/src/requests/cookies.py::RequestsCookieJar",
+        "data/source_repo/src/requests/cookies.py::_find",
+        "data/source_repo/src/requests/cookies.py::remove_cookie_by_name",
+        "data/source_repo/src/requests/cookies.py::get_cookie_header",
+        "data/source_repo/src/requests/cookies.py::get"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 1,
+          "coverage_gain": 11.376088798046112,
+          "relevance": 0.6027869582176208,
+          "ratio": 18.872486610665963,
+          "score": 5.9894378781318665
+        },
+        {
+          "step": 2,
+          "index": 2,
+          "coverage_gain": 0.6040729880332947,
+          "relevance": 0.5907513499259949,
+          "ratio": 1.022550330369907,
+          "score": 0.5974121689796448
+        },
+        {
+          "step": 3,
+          "index": 0,
+          "coverage_gain": 0.3703256845474243,
+          "relevance": 0.6261107325553894,
+          "ratio": 0.5914699513870146,
+          "score": 0.49821820855140686
+        },
+        {
+          "step": 4,
+          "index": 13,
+          "coverage_gain": 0.46010148525238037,
+          "relevance": 0.47091856598854065,
+          "ratio": 0.9770298274109169,
+          "score": 0.4655100256204605
+        },
+        {
+          "step": 5,
+          "index": 4,
+          "coverage_gain": 0.3177102208137512,
+          "relevance": 0.5455293655395508,
+          "ratio": 0.5823888517889827,
+          "score": 0.431619793176651
+        }
+      ]
+    },
+    {
+      "qid": "q3",
+      "selected_ids": [
+        "data/source_repo/src/requests/cookies.py::cookiejar_from_dict",
+        "data/source_repo/src/requests/cookies.py::__init__",
+        "data/source_repo/src/requests/cookies.py::RequestsCookieJar",
+        "data/source_repo/src/requests/_types.py::BaseRequestKwargs",
+        "data/source_repo/src/requests/models.py::prepare_cookies"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 1,
+          "coverage_gain": 11.97732698917389,
+          "relevance": 0.7381213903427124,
+          "ratio": 16.226771295183266,
+          "score": 6.357724189758301
+        },
+        {
+          "step": 2,
+          "index": 6,
+          "coverage_gain": 1.0573694705963135,
+          "relevance": 0.6405669450759888,
+          "ratio": 1.6506775423306934,
+          "score": 0.8489682078361511
+        },
+        {
+          "step": 3,
+          "index": 0,
+          "coverage_gain": 0.20707225799560547,
+          "relevance": 0.7747738361358643,
+          "ratio": 0.26726800562647457,
+          "score": 0.49092304706573486
+        },
+        {
+          "step": 4,
+          "index": 7,
+          "coverage_gain": 0.28231555223464966,
+          "relevance": 0.6328957676887512,
+          "ratio": 0.4460695846736777,
+          "score": 0.45760565996170044
+        },
+        {
+          "step": 5,
+          "index": 9,
+          "coverage_gain": 0.22261643409729004,
+          "relevance": 0.6247865557670593,
+          "ratio": 0.35630797756840443,
+          "score": 0.4237014949321747
+        }
+      ]
+    },
+    {
+      "qid": "q4",
+      "selected_ids": [
+        "data/source_repo/src/requests/cookies.py::RequestsCookieJar",
+        "data/source_repo/src/requests/models.py::__init__",
+        "data/source_repo/src/requests/cookies.py::cookiejar_from_dict",
+        "data/source_repo/src/requests/cookies.py::MockRequest",
+        "data/source_repo/src/requests/cookies.py::_find"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 11.319521725177765,
+          "relevance": 0.6055039167404175,
+          "ratio": 18.694382335482892,
+          "score": 5.962512820959091
+        },
+        {
+          "step": 2,
+          "index": 7,
+          "coverage_gain": 0.8252437114715576,
+          "relevance": 0.4918889105319977,
+          "ratio": 1.6777034281562138,
+          "score": 0.6585663110017776
+        },
+        {
+          "step": 3,
+          "index": 3,
+          "coverage_gain": 0.4722333550453186,
+          "relevance": 0.5656645894050598,
+          "ratio": 0.8348292678917592,
+          "score": 0.5189489722251892
+        },
+        {
+          "step": 4,
+          "index": 9,
+          "coverage_gain": 0.46010130643844604,
+          "relevance": 0.5206403136253357,
+          "ratio": 0.8837220138307329,
+          "score": 0.49037081003189087
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.3260384202003479,
+          "relevance": 0.5695907473564148,
+          "ratio": 0.5724082101290405,
+          "score": 0.44781458377838135
+        }
+      ]
+    },
+    {
+      "qid": "q5",
+      "selected_ids": [
+        "data/source_repo/src/requests/auth.py::HTTPBasicAuth",
+        "data/source_repo/src/requests/auth.py::__call__",
+        "data/source_repo/src/requests/adapters.py::proxy_headers",
+        "data/source_repo/src/requests/models.py::prepare_auth",
+        "data/source_repo/src/requests/adapters.py::add_headers"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 10.525869190692902,
+          "relevance": 0.5652239918708801,
+          "ratio": 18.622474173207838,
+          "score": 5.545546591281891
+        },
+        {
+          "step": 2,
+          "index": 12,
+          "coverage_gain": 1.1482781767845154,
+          "relevance": 0.44337326288223267,
+          "ratio": 2.589867889912697,
+          "score": 0.795825719833374
+        },
+        {
+          "step": 3,
+          "index": 1,
+          "coverage_gain": 0.6994633674621582,
+          "relevance": 0.5094086527824402,
+          "ratio": 1.3730889014970995,
+          "score": 0.6044360101222992
+        },
+        {
+          "step": 4,
+          "index": 4,
+          "coverage_gain": 0.3988466262817383,
+          "relevance": 0.48814141750335693,
+          "ratio": 0.8170718811808166,
+          "score": 0.4434940218925476
+        },
+        {
+          "step": 5,
+          "index": 8,
+          "coverage_gain": 0.37216508388519287,
+          "relevance": 0.47126948833465576,
+          "ratio": 0.789707573049823,
+          "score": 0.4217172861099243
+        }
+      ]
+    },
+    {
+      "qid": "q6",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::request",
+        "data/source_repo/src/requests/auth.py::HTTPDigestAuth",
+        "data/source_repo/src/requests/auth.py::HTTPBasicAuth",
+        "data/source_repo/src/requests/auth.py::handle_401",
+        "data/source_repo/src/requests/models.py::Response"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 9,
+          "coverage_gain": 11.094278812408447,
+          "relevance": 0.46795356273651123,
+          "ratio": 23.708076390167925,
+          "score": 5.781116187572479
+        },
+        {
+          "step": 2,
+          "index": 0,
+          "coverage_gain": 0.9413807392120361,
+          "relevance": 0.6509996652603149,
+          "ratio": 1.446054106395902,
+          "score": 0.7961902022361755
+        },
+        {
+          "step": 3,
+          "index": 2,
+          "coverage_gain": 0.3890402913093567,
+          "relevance": 0.5789602994918823,
+          "ratio": 0.6719636763536175,
+          "score": 0.4840002954006195
+        },
+        {
+          "step": 4,
+          "index": 1,
+          "coverage_gain": 0.311475932598114,
+          "relevance": 0.5888546705245972,
+          "ratio": 0.5289521306176059,
+          "score": 0.4501653015613556
+        },
+        {
+          "step": 5,
+          "index": 4,
+          "coverage_gain": 0.3553244471549988,
+          "relevance": 0.5370630025863647,
+          "ratio": 0.6616066372917939,
+          "score": 0.44619372487068176
+        }
+      ]
+    },
+    {
+      "qid": "q7",
+      "selected_ids": [
+        "data/source_repo/src/requests/models.py::PreparedRequest",
+        "data/source_repo/src/requests/sessions.py::merge_setting",
+        "data/source_repo/src/requests/_types.py::_ValidatedRequest",
+        "data/source_repo/src/requests/api.py::options",
+        "data/source_repo/src/requests/adapters.py::add_headers"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 2,
+          "coverage_gain": 10.797050565481186,
+          "relevance": 0.43766969442367554,
+          "ratio": 24.669404126092775,
+          "score": 5.617360129952431
+        },
+        {
+          "step": 2,
+          "index": 6,
+          "coverage_gain": 0.5352282226085663,
+          "relevance": 0.41589486598968506,
+          "ratio": 1.2869315453916685,
+          "score": 0.47556154429912567
+        },
+        {
+          "step": 3,
+          "index": 1,
+          "coverage_gain": 0.4065081477165222,
+          "relevance": 0.4377425014972687,
+          "ratio": 0.9286467416942347,
+          "score": 0.42212532460689545
+        },
+        {
+          "step": 4,
+          "index": 9,
+          "coverage_gain": 0.410921573638916,
+          "relevance": 0.3903184235095978,
+          "ratio": 1.0527854922759279,
+          "score": 0.4006199985742569
+        },
+        {
+          "step": 5,
+          "index": 10,
+          "coverage_gain": 0.4098294973373413,
+          "relevance": 0.39022624492645264,
+          "ratio": 1.050235607332314,
+          "score": 0.400027871131897
+        }
+      ]
+    },
+    {
+      "qid": "q8",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::request",
+        "data/source_repo/src/requests/sessions.py::merge_hooks",
+        "data/source_repo/src/requests/sessions.py::Session",
+        "data/source_repo/src/requests/models.py::RequestHooksMixin",
+        "data/source_repo/src/requests/adapters.py::add_headers"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 6,
+          "coverage_gain": 11.082140535116196,
+          "relevance": 0.44348686933517456,
+          "ratio": 24.988655361384858,
+          "score": 5.762813702225685
+        },
+        {
+          "step": 2,
+          "index": 0,
+          "coverage_gain": 0.7990148365497589,
+          "relevance": 0.6678135991096497,
+          "ratio": 1.1964638599978061,
+          "score": 0.7334142178297043
+        },
+        {
+          "step": 3,
+          "index": 1,
+          "coverage_gain": 0.34149831533432007,
+          "relevance": 0.4978286623954773,
+          "ratio": 0.6859755999003374,
+          "score": 0.4196634888648987
+        },
+        {
+          "step": 4,
+          "index": 2,
+          "coverage_gain": 0.3441839814186096,
+          "relevance": 0.46406811475753784,
+          "ratio": 0.7416669460224299,
+          "score": 0.40412604808807373
+        },
+        {
+          "step": 5,
+          "index": 9,
+          "coverage_gain": 0.34560805559158325,
+          "relevance": 0.425741970539093,
+          "ratio": 0.811778211938934,
+          "score": 0.38567501306533813
+        }
+      ]
+    },
+    {
+      "qid": "q9",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::SessionRedirectMixin",
+        "data/source_repo/src/requests/auth.py::__call__",
+        "data/source_repo/src/requests/adapters.py::add_headers",
+        "data/source_repo/src/requests/sessions.py::should_strip_auth",
+        "data/source_repo/src/requests/models.py::is_redirect"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 1,
+          "coverage_gain": 9.767420142889023,
+          "relevance": 0.5086826682090759,
+          "ratio": 19.201401489217776,
+          "score": 5.138051405549049
+        },
+        {
+          "step": 2,
+          "index": 12,
+          "coverage_gain": 1.4424286782741547,
+          "relevance": 0.4432048201560974,
+          "ratio": 3.2545419469177457,
+          "score": 0.942816749215126
+        },
+        {
+          "step": 3,
+          "index": 7,
+          "coverage_gain": 0.9177406430244446,
+          "relevance": 0.4390603303909302,
+          "ratio": 2.090238127883946,
+          "score": 0.6784004867076874
+        },
+        {
+          "step": 4,
+          "index": 0,
+          "coverage_gain": 0.39202284812927246,
+          "relevance": 0.5672931671142578,
+          "ratio": 0.6910410187442212,
+          "score": 0.47965800762176514
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.3142225742340088,
+          "relevance": 0.47510042786598206,
+          "ratio": 0.6613813749766728,
+          "score": 0.3946615010499954
+        }
+      ]
+    },
+    {
+      "qid": "q10",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::Session",
+        "data/source_repo/src/requests/sessions.py::rebuild_proxies",
+        "data/source_repo/src/requests/sessions.py::SessionRedirectMixin",
+        "data/source_repo/src/requests/sessions.py::request",
+        "data/source_repo/src/requests/sessions.py::resolve_redirects"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 1,
+          "coverage_gain": 10.593693733215332,
+          "relevance": 0.5162652134895325,
+          "ratio": 20.519867417776588,
+          "score": 5.554979473352432
+        },
+        {
+          "step": 2,
+          "index": 11,
+          "coverage_gain": 0.6676698923110962,
+          "relevance": 0.4075537323951721,
+          "ratio": 1.638237707669207,
+          "score": 0.5376118123531342
+        },
+        {
+          "step": 3,
+          "index": 0,
+          "coverage_gain": 0.5082377195358276,
+          "relevance": 0.5163997411727905,
+          "ratio": 0.9841943731063338,
+          "score": 0.5123187303543091
+        },
+        {
+          "step": 4,
+          "index": 8,
+          "coverage_gain": 0.4597454071044922,
+          "relevance": 0.42185458540916443,
+          "ratio": 1.0898196274400496,
+          "score": 0.4407999962568283
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.31524479389190674,
+          "relevance": 0.47290509939193726,
+          "ratio": 0.6666132259881515,
+          "score": 0.394074946641922
+        }
+      ]
+    },
+    {
+      "qid": "q11",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::resolve_redirects",
+        "data/source_repo/src/requests/sessions.py::rebuild_proxies",
+        "data/source_repo/src/requests/sessions.py::SessionRedirectMixin",
+        "data/source_repo/src/requests/models.py::is_permanent_redirect",
+        "data/source_repo/src/requests/sessions.py::rebuild_method"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 10.045301795005798,
+          "relevance": 0.5133914351463318,
+          "ratio": 19.566555083145456,
+          "score": 5.279346615076065
+        },
+        {
+          "step": 2,
+          "index": 1,
+          "coverage_gain": 0.989898681640625,
+          "relevance": 0.5042726993560791,
+          "ratio": 1.9630225528858816,
+          "score": 0.747085690498352
+        },
+        {
+          "step": 3,
+          "index": 5,
+          "coverage_gain": 0.835187554359436,
+          "relevance": 0.4374161958694458,
+          "ratio": 1.9093658676705967,
+          "score": 0.6363018751144409
+        },
+        {
+          "step": 4,
+          "index": 7,
+          "coverage_gain": 0.49456334114074707,
+          "relevance": 0.42728549242019653,
+          "ratio": 1.1574540907988256,
+          "score": 0.4609244167804718
+        },
+        {
+          "step": 5,
+          "index": 3,
+          "coverage_gain": 0.34431207180023193,
+          "relevance": 0.46431800723075867,
+          "ratio": 0.7415436542160948,
+          "score": 0.4043150395154953
+        }
+      ]
+    },
+    {
+      "qid": "q12",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::get",
+        "data/source_repo/src/requests/sessions.py::get_redirect_target",
+        "data/source_repo/src/requests/models.py::__init__",
+        "data/source_repo/src/requests/models.py::is_redirect",
+        "data/source_repo/src/requests/api.py::head"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 6,
+          "coverage_gain": 10.299184918403625,
+          "relevance": 0.4795633554458618,
+          "ratio": 21.47617160787488,
+          "score": 5.389374136924744
+        },
+        {
+          "step": 2,
+          "index": 0,
+          "coverage_gain": 1.1438735723495483,
+          "relevance": 0.5815072059631348,
+          "ratio": 1.9670840887603125,
+          "score": 0.8626903891563416
+        },
+        {
+          "step": 3,
+          "index": 9,
+          "coverage_gain": 0.5192589163780212,
+          "relevance": 0.4499390721321106,
+          "ratio": 1.1540649579895943,
+          "score": 0.4845989942550659
+        },
+        {
+          "step": 4,
+          "index": 1,
+          "coverage_gain": 0.42930251359939575,
+          "relevance": 0.5167971253395081,
+          "ratio": 0.8306983389610904,
+          "score": 0.4730498194694519
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.40915822982788086,
+          "relevance": 0.5038472414016724,
+          "ratio": 0.8120680162694304,
+          "score": 0.4565027356147766
+        }
+      ]
+    },
+    {
+      "qid": "q13",
+      "selected_ids": [
+        "data/source_repo/src/requests/models.py::prepare_url",
+        "data/source_repo/src/requests/models.py::Response",
+        "data/source_repo/src/requests/models.py::_get_idna_encoded_host",
+        "data/source_repo/src/requests/utils.py::is_valid_cidr",
+        "data/source_repo/src/requests/models.py::prepare_headers"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 9.387118220329285,
+          "relevance": 0.5690719485282898,
+          "ratio": 16.495485754667506,
+          "score": 4.978095084428787
+        },
+        {
+          "step": 2,
+          "index": 9,
+          "coverage_gain": 1.179374635219574,
+          "relevance": 0.37014853954315186,
+          "ratio": 3.1862198799303454,
+          "score": 0.7747615873813629
+        },
+        {
+          "step": 3,
+          "index": 3,
+          "coverage_gain": 0.5193629860877991,
+          "relevance": 0.430912584066391,
+          "ratio": 1.2052629820803296,
+          "score": 0.47513778507709503
+        },
+        {
+          "step": 4,
+          "index": 1,
+          "coverage_gain": 0.45674270391464233,
+          "relevance": 0.4336078464984894,
+          "ratio": 1.0533543329600092,
+          "score": 0.44517527520656586
+        },
+        {
+          "step": 5,
+          "index": 7,
+          "coverage_gain": 0.48327457904815674,
+          "relevance": 0.38119226694107056,
+          "ratio": 1.2677974370420986,
+          "score": 0.43223342299461365
+        }
+      ]
+    },
+    {
+      "qid": "q14",
+      "selected_ids": [
+        "data/source_repo/src/requests/api.py::request",
+        "data/source_repo/src/requests/models.py::prepare_body",
+        "data/source_repo/src/requests/api.py::post",
+        "data/source_repo/src/requests/models.py::Response",
+        "data/source_repo/src/requests/models.py::prepare_content_length"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 10.78079640865326,
+          "relevance": 0.5038274526596069,
+          "ratio": 21.397794724649355,
+          "score": 5.642311930656433
+        },
+        {
+          "step": 2,
+          "index": 4,
+          "coverage_gain": 0.7354638576507568,
+          "relevance": 0.41469550132751465,
+          "ratio": 1.7735033423232351,
+          "score": 0.5750796794891357
+        },
+        {
+          "step": 3,
+          "index": 1,
+          "coverage_gain": 0.5528297424316406,
+          "relevance": 0.4567568302154541,
+          "ratio": 1.2103371112608619,
+          "score": 0.5047932863235474
+        },
+        {
+          "step": 4,
+          "index": 5,
+          "coverage_gain": 0.4111550450325012,
+          "relevance": 0.41289010643959045,
+          "ratio": 0.9957977646351207,
+          "score": 0.41202257573604584
+        },
+        {
+          "step": 5,
+          "index": 6,
+          "coverage_gain": 0.39877331256866455,
+          "relevance": 0.4071999788284302,
+          "ratio": 0.9793058283450548,
+          "score": 0.40298664569854736
+        }
+      ]
+    },
+    {
+      "qid": "q15",
+      "selected_ids": [
+        "data/source_repo/src/requests/models.py::Response",
+        "data/source_repo/src/requests/models.py::is_redirect",
+        "data/source_repo/src/requests/sessions.py::get_redirect_target",
+        "data/source_repo/src/requests/sessions.py::resolve_redirects",
+        "data/source_repo/src/requests/api.py::head"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 3,
+          "coverage_gain": 10.063261032104492,
+          "relevance": 0.5252887606620789,
+          "ratio": 19.15757919400496,
+          "score": 5.2942748963832855
+        },
+        {
+          "step": 2,
+          "index": 0,
+          "coverage_gain": 1.2468482851982117,
+          "relevance": 0.6465305685997009,
+          "ratio": 1.9285217834304709,
+          "score": 0.9466894268989563
+        },
+        {
+          "step": 3,
+          "index": 1,
+          "coverage_gain": 0.3831649422645569,
+          "relevance": 0.5638706684112549,
+          "ratio": 0.6795262880833134,
+          "score": 0.4735178053379059
+        },
+        {
+          "step": 4,
+          "index": 4,
+          "coverage_gain": 0.3356865644454956,
+          "relevance": 0.5173439979553223,
+          "ratio": 0.6488652922856282,
+          "score": 0.42651528120040894
+        },
+        {
+          "step": 5,
+          "index": 6,
+          "coverage_gain": 0.3611098527908325,
+          "relevance": 0.4728259742259979,
+          "ratio": 0.7637267672994459,
+          "score": 0.4169679135084152
+        }
+      ]
+    },
+    {
+      "qid": "q16",
+      "selected_ids": [
+        "data/source_repo/src/requests/models.py::text",
+        "data/source_repo/src/requests/models.py::Response",
+        "data/source_repo/src/requests/models.py::RequestEncodingMixin",
+        "data/source_repo/src/requests/utils.py::get_encoding_from_headers",
+        "data/source_repo/src/requests/models.py::json"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 1,
+          "coverage_gain": 10.267344295978546,
+          "relevance": 0.6125818490982056,
+          "ratio": 16.760771333811665,
+          "score": 5.439963072538376
+        },
+        {
+          "step": 2,
+          "index": 8,
+          "coverage_gain": 0.8662770390510559,
+          "relevance": 0.47057026624679565,
+          "ratio": 1.8409090016680476,
+          "score": 0.6684236526489258
+        },
+        {
+          "step": 3,
+          "index": 10,
+          "coverage_gain": 0.6164214015007019,
+          "relevance": 0.4532812535762787,
+          "ratio": 1.3599093203993926,
+          "score": 0.5348513275384903
+        },
+        {
+          "step": 4,
+          "index": 3,
+          "coverage_gain": 0.3920819163322449,
+          "relevance": 0.5599139332771301,
+          "ratio": 0.7002539015905922,
+          "score": 0.4759979248046875
+        },
+        {
+          "step": 5,
+          "index": 2,
+          "coverage_gain": 0.34904682636260986,
+          "relevance": 0.5637454390525818,
+          "ratio": 0.6191568076350388,
+          "score": 0.4563961327075958
+        }
+      ]
+    },
+    {
+      "qid": "q17",
+      "selected_ids": [
+        "data/source_repo/src/requests/utils.py::resolve_proxies",
+        "data/source_repo/src/requests/api.py::options",
+        "data/source_repo/src/requests/adapters.py::request_url",
+        "data/source_repo/src/requests/sessions.py::__init__",
+        "data/source_repo/src/requests/utils.py::get_environ_proxies"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 0,
+          "coverage_gain": 11.215588808059692,
+          "relevance": 0.5552147030830383,
+          "ratio": 20.200453528663633,
+          "score": 5.885401755571365
+        },
+        {
+          "step": 2,
+          "index": 12,
+          "coverage_gain": 0.924396812915802,
+          "relevance": 0.42771753668785095,
+          "ratio": 2.161231966484527,
+          "score": 0.6760571748018265
+        },
+        {
+          "step": 3,
+          "index": 6,
+          "coverage_gain": 0.496226966381073,
+          "relevance": 0.4916034936904907,
+          "ratio": 1.0094048816778614,
+          "score": 0.49391523003578186
+        },
+        {
+          "step": 4,
+          "index": 2,
+          "coverage_gain": 0.30497562885284424,
+          "relevance": 0.515286922454834,
+          "ratio": 0.5918559458096397,
+          "score": 0.4101312756538391
+        },
+        {
+          "step": 5,
+          "index": 1,
+          "coverage_gain": 0.18759030103683472,
+          "relevance": 0.5453712940216064,
+          "ratio": 0.3439680509282595,
+          "score": 0.3664807975292206
+        }
+      ]
+    },
+    {
+      "qid": "q18",
+      "selected_ids": [
+        "data/source_repo/src/requests/sessions.py::request",
+        "data/source_repo/src/requests/sessions.py::get",
+        "data/source_repo/src/requests/api.py::head",
+        "data/source_repo/src/requests/models.py::__init__",
+        "data/source_repo/src/requests/sessions.py::session"
+      ],
+      "trace": [
+        {
+          "step": 1,
+          "index": 7,
+          "coverage_gain": 11.488051176071167,
+          "relevance": 0.49342024326324463,
+          "ratio": 23.2824885742318,
+          "score": 5.990735709667206
+        },
+        {
+          "step": 2,
+          "index": 1,
+          "coverage_gain": 0.8216651678085327,
+          "relevance": 0.5769514441490173,
+          "ratio": 1.4241495989674822,
+          "score": 0.699308305978775
+        },
+        {
+          "step": 3,
+          "index": 5,
+          "coverage_gain": 0.42619842290878296,
+          "relevance": 0.5069143176078796,
+          "ratio": 0.8407701422204966,
+          "score": 0.4665563702583313
+        },
+        {
+          "step": 4,
+          "index": 2,
+          "coverage_gain": 0.3553241491317749,
+          "relevance": 0.5380803346633911,
+          "ratio": 0.6603552039381932,
+          "score": 0.446702241897583
+        },
+        {
+          "step": 5,
+          "index": 14,
+          "coverage_gain": 0.37614405155181885,
+          "relevance": 0.45479798316955566,
+          "ratio": 0.8270574309288143,
+          "score": 0.41547101736068726
+        }
+      ]
+    }
+  ]
+}

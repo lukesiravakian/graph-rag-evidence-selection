@@ -1,0 +1,350 @@
+{
+  "config": {
+    "embedding_model": "all-mpnet-base-v2",
+    "num_candidates": 15,
+    "k": 5,
+    "alpha": 0.5,
+    "questions": 18
+  },
+  "pool_recall": 1.0,
+  "pool_recall_hits": 18,
+  "per_method": {
+    "top_k": {
+      "hits": 14,
+      "recall": 0.7777777777777778,
+      "missed_qids": [
+        "q4",
+        "q5",
+        "q7",
+        "q16"
+      ],
+      "misses_with_gold_in_pool": [
+        "q4",
+        "q5",
+        "q7",
+        "q16"
+      ],
+      "misses_with_gold_outside_pool": []
+    },
+    "mmr": {
+      "hits": 13,
+      "recall": 0.7222222222222222,
+      "missed_qids": [
+        "q4",
+        "q5",
+        "q11",
+        "q14",
+        "q17"
+      ],
+      "misses_with_gold_in_pool": [
+        "q4",
+        "q5",
+        "q11",
+        "q14",
+        "q17"
+      ],
+      "misses_with_gold_outside_pool": []
+    },
+    "facility_location_weighted": {
+      "hits": 13,
+      "recall": 0.7222222222222222,
+      "missed_qids": [
+        "q1",
+        "q4",
+        "q5",
+        "q16",
+        "q18"
+      ],
+      "misses_with_gold_in_pool": [
+        "q1",
+        "q4",
+        "q5",
+        "q16",
+        "q18"
+      ],
+      "misses_with_gold_outside_pool": []
+    },
+    "facility_location_coverage_only": {
+      "hits": 8,
+      "recall": 0.4444444444444444,
+      "missed_qids": [
+        "q1",
+        "q3",
+        "q4",
+        "q5",
+        "q9",
+        "q10",
+        "q12",
+        "q16",
+        "q17",
+        "q18"
+      ],
+      "misses_with_gold_in_pool": [
+        "q1",
+        "q3",
+        "q4",
+        "q5",
+        "q9",
+        "q10",
+        "q12",
+        "q16",
+        "q17",
+        "q18"
+      ],
+      "misses_with_gold_outside_pool": []
+    },
+    "reranking": {
+      "hits": 14,
+      "recall": 0.7777777777777778,
+      "missed_qids": [
+        "q10",
+        "q14",
+        "q16",
+        "q17"
+      ],
+      "misses_with_gold_in_pool": [
+        "q10",
+        "q14",
+        "q16",
+        "q17"
+      ],
+      "misses_with_gold_outside_pool": []
+    }
+  },
+  "per_question": [
+    {
+      "qid": "q1",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 2,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": false,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q2",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q3",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 3,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q4",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 6,
+      "distinct_ids_in_top_k": 4,
+      "hits": {
+        "top_k": false,
+        "mmr": false,
+        "facility_location_weighted": false,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q5",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 6,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": false,
+        "mmr": false,
+        "facility_location_weighted": false,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q6",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q7",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 7,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": false,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q8",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q9",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q10",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 3,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": false,
+        "reranking": false
+      }
+    },
+    {
+      "qid": "q11",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 2,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": false,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q12",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q13",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q14",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 5,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": false,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": false
+      }
+    },
+    {
+      "qid": "q15",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": true,
+        "reranking": true
+      }
+    },
+    {
+      "qid": "q16",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 6,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": false,
+        "mmr": true,
+        "facility_location_weighted": false,
+        "facility_location_coverage_only": false,
+        "reranking": false
+      }
+    },
+    {
+      "qid": "q17",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 2,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": false,
+        "facility_location_weighted": true,
+        "facility_location_coverage_only": false,
+        "reranking": false
+      }
+    },
+    {
+      "qid": "q18",
+      "gold_in_pool": true,
+      "gold_rank_in_pool": 1,
+      "distinct_ids_in_top_k": 5,
+      "hits": {
+        "top_k": true,
+        "mmr": true,
+        "facility_location_weighted": false,
+        "facility_location_coverage_only": false,
+        "reranking": true
+      }
+    }
+  ]
+}

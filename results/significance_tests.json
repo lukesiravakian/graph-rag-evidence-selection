@@ -1,0 +1,230 @@
+{
+  "n_questions": 18,
+  "recall_intervals": {
+    "top_k": {
+      "hits": 14,
+      "n": 18,
+      "recall": 0.7777777777777778,
+      "wilson_95": [
+        0.5478541568378739,
+        0.9099907189139831
+      ]
+    },
+    "reranking": {
+      "hits": 14,
+      "n": 18,
+      "recall": 0.7777777777777778,
+      "wilson_95": [
+        0.5478541568378739,
+        0.9099907189139831
+      ]
+    },
+    "mmr": {
+      "hits": 13,
+      "n": 18,
+      "recall": 0.7222222222222222,
+      "wilson_95": [
+        0.4912734343970254,
+        0.8750024662044601
+      ]
+    },
+    "facility_location_weighted": {
+      "hits": 13,
+      "n": 18,
+      "recall": 0.7222222222222222,
+      "wilson_95": [
+        0.4912734343970254,
+        0.8750024662044601
+      ]
+    },
+    "facility_location_coverage_only": {
+      "hits": 8,
+      "n": 18,
+      "recall": 0.4444444444444444,
+      "wilson_95": [
+        0.24559518127005633,
+        0.6628358435795723
+      ]
+    }
+  },
+  "mcnemar_paired_exact": {
+    "top_k vs mmr": {
+      "b": 3,
+      "c": 2,
+      "p_exact": 1.0
+    },
+    "top_k vs facility_location_weighted": {
+      "b": 2,
+      "c": 1,
+      "p_exact": 1.0
+    },
+    "top_k vs facility_location_coverage_only": {
+      "b": 7,
+      "c": 1,
+      "p_exact": 0.0703125
+    },
+    "top_k vs reranking": {
+      "b": 3,
+      "c": 3,
+      "p_exact": 1.0
+    },
+    "facility_location_weighted vs coverage_only": {
+      "b": 5,
+      "c": 0,
+      "p_exact": 0.0625
+    }
+  },
+  "mcnemar_bounds": {
+    "top_k vs facility_location_weighted": {
+      "net_gap": 1,
+      "best_case_discordance": [
+        1,
+        0
+      ],
+      "p_best_case": 1.0,
+      "p_one_discordant_against": 1.0
+    },
+    "top_k vs mmr": {
+      "net_gap": 1,
+      "best_case_discordance": [
+        1,
+        0
+      ],
+      "p_best_case": 1.0,
+      "p_one_discordant_against": 1.0
+    },
+    "top_k vs facility_location_coverage_only": {
+      "net_gap": 6,
+      "best_case_discordance": [
+        6,
+        0
+      ],
+      "p_best_case": 0.03125,
+      "p_one_discordant_against": 0.0703125
+    }
+  },
+  "error_profile_overlap": {
+    "pairwise_shared_misses": {
+      "top_k vs reranking": {
+        "shared": [
+          "q16"
+        ],
+        "union": [
+          "q10",
+          "q14",
+          "q16",
+          "q17",
+          "q4",
+          "q5",
+          "q7"
+        ]
+      },
+      "top_k vs mmr": {
+        "shared": [
+          "q4",
+          "q5"
+        ],
+        "union": [
+          "q11",
+          "q14",
+          "q16",
+          "q17",
+          "q4",
+          "q5",
+          "q7"
+        ]
+      },
+      "top_k vs facility_location_weighted": {
+        "shared": [
+          "q16",
+          "q4",
+          "q5"
+        ],
+        "union": [
+          "q1",
+          "q16",
+          "q18",
+          "q4",
+          "q5",
+          "q7"
+        ]
+      },
+      "reranking vs mmr": {
+        "shared": [
+          "q14",
+          "q17"
+        ],
+        "union": [
+          "q10",
+          "q11",
+          "q14",
+          "q16",
+          "q17",
+          "q4",
+          "q5"
+        ]
+      },
+      "reranking vs facility_location_weighted": {
+        "shared": [
+          "q16"
+        ],
+        "union": [
+          "q1",
+          "q10",
+          "q14",
+          "q16",
+          "q17",
+          "q18",
+          "q4",
+          "q5"
+        ]
+      },
+      "mmr vs facility_location_weighted": {
+        "shared": [
+          "q4",
+          "q5"
+        ],
+        "union": [
+          "q1",
+          "q11",
+          "q14",
+          "q16",
+          "q17",
+          "q18",
+          "q4",
+          "q5"
+        ]
+      }
+    },
+    "union_hits": {
+      "top_k+reranking": 17,
+      "top_k+mmr": 16,
+      "top_k+facility_location_weighted": 15,
+      "reranking+mmr": 16,
+      "reranking+facility_location_weighted": 17,
+      "mmr+facility_location_weighted": 16,
+      "top_k+reranking+mmr": 18,
+      "top_k+reranking+facility_location_weighted": 17,
+      "top_k+mmr+facility_location_weighted": 16,
+      "reranking+mmr+facility_location_weighted": 18,
+      "top_k+reranking+mmr+facility_location_weighted": 18
+    },
+    "missed_by_every_method": [],
+    "budget_caveat": "union_hits are NOT budget-matched: the union of two k=5 selections holds up to 10 passages, so these counts must be compared against a k=10 single-method control before any claim is made from them."
+  },
+  "density_vs_hit": {
+    "sparse_density_lt_1": {
+      "n": 7,
+      "hits": 7,
+      "misses": 0,
+      "hit_rate": 1.0
+    },
+    "dense_density_eq_1": {
+      "n": 11,
+      "hits": 6,
+      "misses": 5,
+      "hit_rate": 0.5454545454545454
+    },
+    "fisher_exact_two_sided": 0.10130718954248366
+  }
+}
