@@ -1,5 +1,6 @@
 torch==2.2.2
 numpy<2
+networkx
 sentence-transformers<6
 transformers<5
 faiss-cpu==1.10.0
@@ -8,3 +9,4 @@ pandas
 tqdm
 python-dotenv
 google-genai
+matplotlib

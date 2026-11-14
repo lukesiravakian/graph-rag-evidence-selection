@@ -5,7 +5,7 @@ from sentence_transformers import SentenceTransformer
 def build_similarity_graph(
     passages: list[dict[str, str]],
     model: SentenceTransformer,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[NDArray[np.floating], NDArray[np.floating]]:
     """
     passages: list of passage dicts (each with a 'text' field)
     model: a loaded SentenceTransformer model
@@ -20,6 +20,20 @@ def build_similarity_graph(
     return similarity_matrix, embeddings
 
 
+def compute_query_similarities(
+    query: str,
+    passages: list[dict[str, str]],
+    model: SentenceTransformer,
+) -> NDArray[np.floating]:
+    """Returns an array: how similar each passage is to the query itself."""
+    texts = [p["text"] for p in passages]
+    embeddings = np.array(model.encode(texts))
+    query_embedding = np.array(model.encode([query])[0])
+    norms = np.linalg.norm(embeddings, axis=1)
+    query_norm = np.linalg.norm(query_embedding)
+    return (embeddings @ query_embedding) / (norms * query_norm)
+
+
 if __name__ == "__main__":
     import json
 
@@ -31,16 +45,8 @@ if __name__ == "__main__":
     print("Diagonal values (should all be ~1.0):", sim_matrix.diagonal())
     print("Symmetric check (should be True):", np.allclose(sim_matrix, sim_matrix.T))
 
-
-def compute_query_similarities(
-    query: str,
-    passages: list[dict[str, str]],
-    model: SentenceTransformer,
-) -> NDArray[np.float32]:
-    """Returns an array: how similar each passage is to the query itself."""
-    texts = [p["text"] for p in passages]
-    embeddings = np.array(model.encode(texts))
-    query_embedding = np.array(model.encode([query])[0])
-    norms = np.linalg.norm(embeddings, axis=1)
-    query_norm = np.linalg.norm(query_embedding)
-    return (embeddings @ query_embedding) / (norms * query_norm)
+    query_sims = compute_query_similarities(
+        "How does requests remove a cookie by name?", passages, model
+    )
+    print("Query similarity shape:", query_sims.shape)
+    print("Query similarity range:", float(query_sims.min()), "to", float(query_sims.max()))

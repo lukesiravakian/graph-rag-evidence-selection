@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="Python" src="https://img.shields.io/badge/python-3.14-3776AB?logo=python&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white">
   <img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-2.2-EE4C2C?logo=pytorch&logoColor=white">
   <img alt="FAISS" src="https://img.shields.io/badge/retriever-FAISS-4285F4">
   <img alt="Gemini" src="https://img.shields.io/badge/generator-Gemini-8E75FF">
@@ -29,6 +29,9 @@
   - [2. Run the baseline](#2-run-the-baseline)
   - [3. Compare selection methods](#3-compare-selection-methods)
   - [4. Inspect subgraph structure](#4-inspect-subgraph-structure)
+  - [5. Instrument the selection objective](#5-instrument-the-selection-objective)
+  - [6. Attribute the misses](#6-attribute-the-misses)
+  - [7. Compute the significance statistics](#7-compute-the-significance-statistics)
 - [Datasets](#datasets)
 - [Methodology](#methodology)
   - [Evidence selection strategies](#evidence-selection-strategies)
@@ -46,7 +49,21 @@
 
 This project investigates whether retrieval can be improved by optimizing the diversity and complementary information content of retrieved evidence rather than maximizing similarity scores alone. Instead of selecting the top k passages directly from a dense retriever, the system constructs a graph in which nodes represent candidate documents and weighted edges encode semantic overlap between them. A graph optimization procedure then identifies subsets of documents that collectively maximize topic coverage while minimizing redundancy. These curated evidence sets are passed to a downstream language model for question answering, with the central hypothesis that more diverse supporting information will improve factual accuracy, calibration, and reasoning performance without requiring additional retrieved context.
 
-The group will evaluate the framework across established open-domain question answering benchmarks using publicly available Wikipedia-based corpora and compare graph-based evidence selection against conventional dense retrieval, maximal marginal relevance, and reranking approaches under identical retrieval budgets. Evaluation will measure answer correctness, citation precision, hallucination frequency, and robustness under adversarial retrieval scenarios containing partially conflicting evidence. Beyond overall performance, the study will examine how graph topology changes across different question types and whether certain structural properties of the selected evidence subgraphs correlate with improved reasoning.
+**What has actually been evaluated so far.** The project began on an open-domain text
+corpus — a 300-question HotpotQA dev slice, which is still in `data/` — but that slice
+was only ever used to validate the pipeline end to end. Every reported result comes
+instead from a retrieval-augmented **code** question-answering benchmark built here: 18
+hand-written questions over 320 function and class definitions parsed out of the Python
+`requests` library. Code was chosen because redundancy and complementarity between
+passages are easier to characterize when functions, classes, and call sites are tied
+together by explicit structural relations. Graph-based evidence selection is compared
+against plain dense top-k retrieval, MMR, and cross-encoder reranking under identical
+retrieval budgets, scored on retrieval precision and recall, citation precision, and an
+LLM-judged hallucination rate. The structural question — whether properties of the
+selected evidence subgraph correlate with retrieval success — is addressed in
+[Results](#results). Two things in the original plan have **not** been done: answer
+correctness is never graded, and no adversarial / conflicting-evidence condition has
+been run.
 
 ## Key Features
 
@@ -55,6 +72,8 @@ The group will evaluate the framework across established open-domain question an
 - **Citation-grounded generation** — the generator (Gemini) is prompted to cite the exact passage IDs it used, and the scorer checks those citations against what was actually provided.
 - **Built-in hallucination judging** — an LLM judge flags answers that contain claims unsupported by the provided passages.
 - **Structural graph analysis** — inspects the similarity subgraph of each selected evidence set (density, clustering coefficient, average pairwise similarity) and correlates it with retrieval hits/misses.
+- **An instrumented objective and a reported ablation** — the greedy loop can report the value of both of its score terms at every step, which is how the coverage-vs-relevance scale gap was found, and the coverage-only (`α = 0`) variant is kept as a first-class ablation rather than deleted.
+- **Reproducible statistics** — Wilson intervals, exact McNemar bounds, and the Fisher exact test are computed by a script from the saved result files, not by hand.
 - **Two ready-to-use corpora** — a 300-question HotpotQA dev slice and a from-scratch code-QA benchmark built by parsing the `requests` library's source tree with `ast`.
 
 ## Architecture
@@ -105,7 +124,7 @@ graph-rag-evidence-selection/
 ├── selection/                  # Evidence selection strategies
 │   ├── graph_builder.py            # passage×passage similarity graph + query similarities
 │   ├── mmr.py                      # Maximal Marginal Relevance
-│   ├── facility_location.py        # greedy (weighted) facility location
+│   ├── facility_location.py        # greedy (weighted) facility location + instrumented trace
 │   ├── reranker.py                 # cross-encoder reranking
 │   └── structural_analysis.py      # density / clustering coefficient of a selected subgraph
 ├── generator/                  # Answer generation
@@ -116,7 +135,10 @@ graph-rag-evidence-selection/
 │   ├── run_baseline.py             # Week 1: plain top-k baseline
 │   ├── run_comparison.py           # Week 2: top-k vs. MMR vs. facility location
 │   ├── run_week3_comparison.py     # Week 3: + relevance-weighted facility location + reranking
-│   └── run_structural_analysis.py  # subgraph structure vs. hit/miss
+│   ├── run_structural_analysis.py  # subgraph structure vs. hit/miss
+│   ├── run_alpha_instrumentation.py # per-step values of the two terms of Algorithm 1
+│   ├── run_miss_analysis.py        # was each missed gold passage even in the pool?
+│   └── run_significance_tests.py   # Wilson / McNemar / Fisher statistics
 ├── results/                    # JSON outputs written by the scripts above
 └── assets/                     # README images (this file)
 ```
@@ -125,7 +147,7 @@ graph-rag-evidence-selection/
 
 ### Prerequisites
 
-- Python **3.14** (the dataset builders and scripts are run with `python3.14` / `python3` in this repo)
+- Python **3.12** (`torch==2.2.2`, pinned in `requirements.txt`, has no wheels for 3.13+)
 - A [Google AI Studio](https://aistudio.google.com/) API key for the Gemini generator
 - ~2 GB free disk for cached `sentence-transformers` / cross-encoder model weights
 
@@ -203,12 +225,50 @@ python scripts/run_structural_analysis.py
 
 Writes [`results/structural_analysis.json`](results/structural_analysis.json).
 
+### 5. Instrument the selection objective
+
+Reports, for the candidate chosen at each greedy step, the coverage gain, the relevance
+term, and their ratio — the measurement behind the finding that `α = 0.5` does not
+split influence evenly between the two terms:
+
+```bash
+python scripts/run_alpha_instrumentation.py
+```
+
+Writes [`results/alpha_instrumentation.json`](results/alpha_instrumentation.json).
+Needs the FAISS index but no API key.
+
+### 6. Attribute the misses
+
+For every question, records whether the gold passage reached the `n = 15` pool and
+whether each method selected it — which separates retrieval failures from selection
+failures and reports the recall ceiling for the pool-based methods:
+
+```bash
+python scripts/run_miss_analysis.py
+```
+
+Writes [`results/miss_analysis.json`](results/miss_analysis.json). Needs the FAISS index
+but no API key.
+
+### 7. Compute the significance statistics
+
+Wilson intervals for recall@5, exact McNemar bounds on the recall gaps, and a two-sided
+Fisher exact test on the density table, all computed from the saved result files:
+
+```bash
+python scripts/run_significance_tests.py
+```
+
+Writes [`results/significance_tests.json`](results/significance_tests.json). Needs no
+model, no index, and no API key.
+
 ## Datasets
 
 | Dataset | Files | Size | Notes |
 | --- | --- | --- | --- |
-| **HotpotQA (dev slice)** | [`data/hotpotqa_dev_300.jsonl`](data/hotpotqa_dev_300.jsonl), [`data/all_passages.jsonl`](data/all_passages.jsonl) | 300 questions | Multi-hop open-domain QA with supporting-fact annotations. Regenerate with `python3.14 data/build_dataset.py`. |
-| **Code-QA (`requests` corpus)** | [`data/code_passages.jsonl`](data/code_passages.jsonl), [`data/code_questions.jsonl`](data/code_questions.jsonl) | 320 passages / 18 questions | Function/class-level chunks parsed from the `requests` source tree with Python's `ast` module; each question has exactly one gold `passage_id`. Regenerate with `data/build_code_dataset.py`. |
+| **HotpotQA (dev slice)** | [`data/hotpotqa_dev_300.jsonl`](data/hotpotqa_dev_300.jsonl), [`data/all_passages.jsonl`](data/all_passages.jsonl) | 300 questions | Multi-hop open-domain QA with supporting-fact annotations. **Used only to validate the pipeline end to end — no reported result comes from it.** Regenerate with `python data/build_dataset.py`. |
+| **Code-QA (`requests` corpus)** | [`data/code_passages.jsonl`](data/code_passages.jsonl), [`data/code_questions.jsonl`](data/code_questions.jsonl) | 320 passages / 18 questions | **The benchmark behind every reported number.** Function/class-level chunks parsed from the `requests` source tree with Python's `ast` module; each question has exactly one gold `passage_id`. Only 280 of the 320 `passage_id`s are distinct — see [`data/README.md`](data/README.md). Regenerate with `python data/build_code_dataset.py` after cloning `requests` into `data/source_repo` (that tree is gitignored). |
 
 See [`data/README.md`](data/README.md) for the full field-level schema of each file.
 
@@ -257,16 +317,67 @@ $$
 
 ### Performance Comparison Across Selection Methods
 
-| Method | Precision@5 | Recall@5 | Citation Precision | Hallucination Rate |
-| --- | --- | --- | --- | --- |
-| **Top-$k$ Baseline** | 0.16 | 0.78 | 0.89 | 0.00 |
-| **MMR** | 0.14 | 0.72 | 0.83 | 0.06 |
-| **Reranking** | 0.16 | 0.78 | 0.67 | 0.00 |
-| **Facility Location (Weighted)** | 0.14 | 0.72 | 0.78 | 0.00 |
+| Method | Precision@5 | Recall@5 | Hits | Citation Precision | Hallucination Rate |
+| --- | --- | --- | --- | --- | --- |
+| **Top-$k$ Baseline** | 0.16 | 0.78 | 14 / 18 | 0.89 | 0.00 |
+| **Reranking** | 0.16 | 0.78 | 14 / 18 | 0.67 | 0.00 |
+| **MMR** | 0.14 | 0.72 | 13 / 18 | 0.83 | 0.06 |
+| **Facility Location ($\alpha = 0.5$)** | 0.14 | 0.72 | 13 / 18 | 0.78 | 0.00 |
+| **Facility Location ($\alpha = 0$, coverage only)** | 0.09 | 0.44 | 8 / 18 | — | — |
 
-Across the 4 methods, each evaluating 5 passages, standard Top-k and Reranking achieved the highest retrieval overlap with recall scores of 0.78, while Facility Location and MMR both reached 0.72, showing that enforcing structural diversity is a tradeoff for higher raw recall rates. In terms of retrieval precision, Top-k and Reranking achieved Precision@5 of 0.16, outperforming MMR and Facility Location, which showed 0.14 precision rates. This indicates that focusing on similarity yields somewhat more targeted results, whereas diversity selection returns a wider variety. Citation precision ranged from 0.89 (Top-K) to 0.67 (Reranking), with in-between values of 0.83 for MMR and 0.78 for Facility Location. Hallucination rate was 0 for all methods except MMR, which showed a slight bump to 0.06.
+Across the four selection methods, each handing the generator 5 passages, standard
+Top-k and Reranking achieved the highest retrieval overlap with recall@5 of 0.78 (14 of
+18 questions), while Facility Location and MMR both reached 0.72 (13 of 18).
+Precision@5 follows the same order, 0.16 against 0.14. Citation precision ranged from
+0.89 (Top-k) down to 0.67 (Reranking), with 0.83 for MMR and 0.78 for Facility
+Location — notably, Reranking matched Top-k on recall while scoring the lowest on
+citations. The hallucination rate was 0.00 for every method except MMR, which flagged
+one answer out of 18 (0.06).
 
-**Read with care:** `n = 18` questions, so a single question is worth ~5.6 points of recall — gaps of one question (e.g. the MMR-vs-top-k recall difference) are within noise. Both diversity-aware methods are also capped by the `n = 15` candidate pool: neither can ever retrieve a gold chunk that didn't make it into the pool. Full caveats — duplicate passage IDs, non-persisted retrieved-ID lists, non-byte-identical re-runs — are documented in [`results/README.md`](results/README.md).
+**The headline is parity, not a win.** Weighted facility location matched MMR and did
+not beat ranking by similarity alone. The informative comparison is the ablation: the
+coverage-only variant (`α = 0`), which ignores the query entirely once the pool is
+retrieved, scored *well below every baseline* at 0.09 / 0.44. Representativeness alone
+is not a sufficient selection criterion; adding the relevance term closed most of that
+gap but did not open a new one.
+
+**Why the relevance term only acts late.** Instrumenting the greedy loop
+(`scripts/run_alpha_instrumentation.py`) shows the nominal 0.5/0.5 split is not what
+happens. At the first selection step the coverage term is **16.2 to 25.0× larger** than the
+relevance term (Δc 9.39–11.98 against rel 0.44–0.74) — it sums a contribution over all
+15 pool members while relevance is a single cosine bounded in [-1, 1]. The gap narrows
+as the pool saturates. So `α = 0.5` gives coverage effective control of the first pick
+or two, and relevance only matters for the picks after that.
+
+**Selected-set density beats average similarity as a warning signal.** Stratifying the
+18 questions by the density of the selected five-passage subgraph (edges at cosine ≥
+0.5) separates hits from misses far more sharply than the average similarity does:
+
+| Selected-set density | Questions | Gold retrieved | Hit rate |
+| --- | --- | --- | --- |
+| `< 1.0` (not fully similar) | 7 | 7 | 1.000 |
+| `= 1.0` (fully similar) | 11 | 6 | 0.545 |
+
+Average pairwise similarity, by contrast, is 0.618 for the 13 hits against 0.642 for
+the 5 misses — essentially the same range. This suggests a cheap diagnostic: flag a
+selection as higher risk when its own density saturates.
+
+**Read with care:** `n = 18` questions, so a single question is worth ~5.6 points of
+recall — the one-question gaps here cannot reach significance under any pattern (exact
+McNemar p = 1.0). The density split is descriptive too: a two-sided Fisher exact test
+gives p = 0.10, and the analysis was added after the main comparison, so it is
+exploratory rather than confirmatory. The `n = 15` candidate pool is **not** the
+binding constraint here, contrary to what a pool-size caveat would suggest: the gold
+passage reaches the pool for all 18 questions (`scripts/run_miss_analysis.py`), so the
+recall ceiling for MMR, facility location, and reranking is 1.00 and every one of their
+misses is a selection error rather than a retrieval failure. Top-k's four misses, by
+contrast, are ranking failures on passages that *were* in the pool — so headroom over
+top-k did exist and the selection rules did not find it. Reranking's precision is 0.1556 and Top-k's is 0.1630 —
+both round to 0.16 above, but the difference is an artifact of duplicate passage IDs,
+not of retrieval. Full caveats — duplicate passage IDs, non-persisted retrieved-ID
+lists, an unvalidated LLM judge, post-filtered citations, non-byte-identical re-runs —
+are documented in [`results/README.md`](results/README.md). All the statistics quoted
+here come from `scripts/run_significance_tests.py`.
 
 ## Reproducing the Results
 
@@ -286,19 +397,31 @@ python scripts/run_week3_comparison.py
 
 # 5. Structural analysis of the selected evidence subgraphs
 python scripts/run_structural_analysis.py
+
+# 6. The coverage-vs-relevance scale gap inside the selection objective
+python scripts/run_alpha_instrumentation.py
+
+# 7. Per-method misses: retrieval failure or selection failure?
+python scripts/run_miss_analysis.py
+
+# 8. Wilson intervals, McNemar bounds, Fisher exact test
+python scripts/run_significance_tests.py
 ```
 
-Every `scripts/run_*.py` file calls the generator, so `GOOGLE_API_KEY` must be set in `.env` first (see [Environment Setup](#environment-setup)). Outputs land in `results/` and are not edited by hand — see [`results/README.md`](results/README.md) for exactly what each file contains.
+Steps 2–4 call the generator, so `GOOGLE_API_KEY` must be set in `.env` first (see [Environment Setup](#environment-setup)). Steps 5–7 need the FAISS index but no API key; step 8 needs neither — it reads the JSON written by the earlier steps. Outputs land in `results/` and are not edited by hand — see [`results/README.md`](results/README.md) for exactly what each file contains.
 
 ## Limitations & Future Work
 
 - **Small sample size.** The code-QA benchmark has 18 questions over a single codebase (`requests`); differences smaller than one question are noise, and findings may not generalize to other repositories or question types.
 - **Single embedding model.** Only `all-mpnet-base-v2` has been tested as the retriever backbone; a different embedding model could change the candidate pool and the ranking within it.
-- **Candidate-pool ceiling.** MMR and facility location can only ever select from the top-`n` retrieved candidates, so they cannot recover a gold passage the retriever missed entirely.
+- **Candidate-pool ceiling — measured, and it does not bind.** MMR, facility location, and reranking can only select from the top-`n` retrieved candidates, but on this benchmark the gold passage is in the pool of 15 for **all 18 questions**, so their ceiling is recall 1.00 and the pool size explains none of their misses. Every miss is attributable to the selection rule. Run `python scripts/run_miss_analysis.py` to reproduce.
 - **Query-agnostic coverage (unweighted facility location).** The original facility-location objective ignores the question after the initial retrieval step, which is the leading hypothesis for why it underperforms top-k — this is what the relevance-weighted variant (`α`) is designed to address.
 - **Citation precision is post-filtered.** The generator discards citation IDs that don't match a provided passage before returning them, so citation precision mostly reflects *whether an answer cited anything acceptable at all*, not whether the model could have hallucinated an invalid ID.
-- **Hallucination rate is LLM-judged, not human-verified.**
-- **Planned:** evaluate on the HotpotQA open-domain slice (currently only the code-QA corpus has full comparison results), run a case-by-case error analysis of retrieval misses, and test additional embedding/generator models.
+- **Hallucination rate is LLM-judged, not human-verified.** The judge also runs at the API's default temperature, unlike the generator, which is pinned to 0.1.
+- **`α` was never swept.** Every weighted result uses the single value `α = 0.5`, and the instrumentation shows that value does not mean what it looks like it means — the coverage term dominates the first picks regardless. A sweep is the obvious next experiment.
+- **Per-question hit/miss is not persisted for the baselines**, so the paired test that the one-question gaps call for can only be bounded, not computed. Saving the selected ID lists per method would fix this at no cost.
+- **Answer correctness is never scored.** All four metrics are about retrieval and grounding; none of them says whether an answer is right.
+- **Planned:** sweep `α`, evaluate on the HotpotQA open-domain slice (currently only the code-QA corpus has full comparison results), repeat the comparison on more repositories, and test additional embedding/generator models.
 
 ## Tech Stack
 

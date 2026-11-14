@@ -121,3 +121,10 @@ retriever/id_map.json
 *.faiss
 
 .kilo/
+
+paper/
+
+# Embedding cache: regenerable with benchmark/build_embeddings.py
+benchmark/*.npy
+benchmark/passage_ids.json
+benchmark/question_ids.json

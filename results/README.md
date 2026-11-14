@@ -6,12 +6,17 @@ script in `scripts/` — nothing in this folder is edited by hand.
 | File | Written by | Holds |
 | --- | --- | --- |
 | `code_baseline_week1.json` | `scripts/run_baseline.py` | Week 1 baseline: dense top-k retrieval → Gemini |
-| `week2_comparison.json` | `scripts/run_comparison.py` | Week 2: top-k vs. MMR vs. facility location |
+| `week2_comparison.json` | `scripts/run_comparison.py` | Week 2: top-k vs. MMR vs. coverage-only facility location (α = 0) |
+| `week3_full_comparison.json` | `scripts/run_week3_comparison.py` | Week 3: top-k vs. MMR vs. weighted facility location (α = 0.5) vs. reranking, with citation precision and hallucination rate. **This is the source of Table II of the paper.** |
+| `structural_analysis.json` | `scripts/run_structural_analysis.py` | Per-question density / clustering coefficient / average pairwise similarity of the selected subgraph, plus hit/miss (Table III, Fig. 3b–c) |
+| `alpha_instrumentation.json` | `scripts/run_alpha_instrumentation.py` | Per-step values of the two terms of Algorithm 1 — the coverage-vs-relevance scale gap of Section III-E and Fig. 3a |
+| `miss_analysis.json` | `scripts/run_miss_analysis.py` | Per question: whether the gold passage reached the pool, its rank in it, and which methods selected it — separates retrieval failures from selection failures |
+| `significance_tests.json` | `scripts/run_significance_tests.py` | Wilson intervals, exact McNemar bounds, and the Fisher exact test quoted in Section V |
 
 ## Shared setup
 
-Both runs use the same corpus, questions, and retrieval budget, so their numbers
-are directly comparable.
+Every run uses the same corpus, questions, and retrieval budget, so the numbers
+across these files are directly comparable.
 
 - **Corpus** — `data/code_passages.jsonl`: 320 function/class chunks extracted with
   `ast` from the `requests` source tree (`data/build_code_dataset.py`). A chunk's
@@ -22,12 +27,16 @@ are directly comparable.
   L2-normalized vectors, i.e. cosine similarity (`retriever/build_index.py`).
 - **Budget** — `k = 5` passages handed to the generator for every method.
 - **Generator** — `gemini-3.6-flash` via `generator/generate.py`, temperature 0.1,
-  `max_output_tokens` 1000, prompted for a 1–2 sentence answer that names the
-  relevant functions or classes.
+  `max_output_tokens` 1000. The week 1 and week 2 runs use `generate_answer`, which is
+  prompted for a 1–2 sentence answer naming the relevant functions or classes. The
+  week 3 run uses `generate_answer_with_citations`, which additionally requires a
+  trailing `CITATIONS:` line and retries once if no valid ID comes back.
+- **Hallucination judge** — `gemini-3.6-flash`, one call per answer; an answer is
+  flagged when the reply begins with `YES`.
 
 ## Metrics
 
-Both files report the two metrics computed by `eval.scorer.evaluate`. They are
+The retrieval metrics in every file come from `eval.scorer.evaluate`. They are
 **set-based per question and then macro-averaged** over questions:
 
 - `precision@k` — `|retrieved ∩ gold| / |retrieved|`
@@ -40,8 +49,9 @@ Because every question has a single gold passage and `k = 5`:
 - `precision@k` is capped at **0.2** — a perfect run cannot score higher, since four
   of the five retrieved chunks are non-gold by construction.
 
-Only *retrieval* is scored. The generated answers are stored but never graded, so
-neither file says anything about answer correctness yet.
+Answer *correctness* is never scored. The generated answers are stored, and
+`week3_full_comparison.json` adds citation precision and an LLM-judged hallucination
+rate, but no file says whether an answer is factually right.
 
 ## `code_baseline_week1.json`
 
@@ -89,9 +99,86 @@ The three methods differ only in *how* the five passages are chosen:
 Plain top-k wins on this dataset. MMR loses one question; facility location loses six.
 That is the expected failure mode for a query-agnostic coverage objective on a corpus
 of 320 chunks — spreading the budget across the topic space pulls passages away from
-the single chunk that actually answers the question. Both diversity methods are also
-capped by their candidate pool: neither can ever retrieve a gold chunk that is not in
-the top-15.
+the single chunk that actually answers the question.
+
+The candidate pool is **not** what caps them. `miss_analysis.json` shows the gold
+passage reaches the pool of 15 for all 18 questions, so the ceiling for every
+pool-based method is recall 1.00 and each of these misses is a selection error.
+
+## `week3_full_comparison.json`
+
+The run behind Table II of the paper. `comparison` holds four metrics per method —
+`precision@k`, `recall@k`, `citation_precision`, `hallucination_rate` — and
+`predictions` holds one list of 18 answers per method, in dataset order.
+
+| Method | `precision@k` | `recall@k` | Questions hit | Citation prec. | Halluc. rate |
+| --- | --- | --- | --- | --- | --- |
+| `top_k` | 0.1630 | 0.7778 | 14 / 18 | 0.8889 | 0.0000 |
+| `reranking` | 0.1556 | 0.7778 | 14 / 18 | 0.6667 | 0.0000 |
+| `mmr` | 0.1444 | 0.7222 | 13 / 18 | 0.8333 | 0.0556 |
+| `facility_location_weighted` | 0.1444 | 0.7222 | 13 / 18 | 0.7778 | 0.0000 |
+
+The coverage-only row of Table II (`precision@k` 0.0889, `recall@k` 0.4444, 8 / 18)
+comes from `week2_comparison.json`; that run predates citation-aware generation, which
+is why the paper leaves its citation and hallucination cells blank.
+
+Note that `reranking` is 0.1556 = 14 × 0.2 / 18 exactly, while `top_k` is 0.1630 —
+higher than 14 hits can give with five distinct IDs each, because of the duplicate
+passage IDs described above. Table II rounds both to 0.16.
+
+## `structural_analysis.json`
+
+One row per question: `qid`, `density`, `clustering_coefficient`,
+`avg_pairwise_similarity`, `hit`. Edges are drawn between selected passages whose
+cosine similarity is at least 0.5 (`selection/structural_analysis.py`), and `density`
+is the fraction of the ten possible pairs that are connected.
+
+| Selected-set density | Questions | Gold retrieved | Hit rate |
+| --- | --- | --- | --- |
+| `< 1.0` (not fully similar) | 7 | 7 | 1.000 |
+| `= 1.0` (fully similar) | 11 | 6 | 0.545 |
+| all | 18 | 13 | 0.722 |
+
+Average pairwise similarity separates the two outcomes far less cleanly: 0.618 for
+the 13 hits against 0.642 for the 5 misses. The density split is descriptive — a
+two-sided Fisher exact test on the table gives p = 0.10, and the analysis was added
+after the main comparison, so `scripts/run_significance_tests.py` reports it as
+exploratory rather than confirmatory.
+
+## `alpha_instrumentation.json`
+
+`by_step` holds, for each of the five selection steps, the range across questions of
+the coverage gain and of the relevance term for the candidate Algorithm 1 actually
+chose, plus the range of their ratio. `per_question` holds the full per-step trace and
+the selected IDs. Selection is untouched by the instrumentation — the traced run picks
+the same sets as `week3_full_comparison.json`.
+
+## `significance_tests.json`
+
+Computed from the three files above; needs no model and no API key.
+`recall_intervals` holds 95% Wilson intervals per method, `density_vs_hit` the Table III
+counts with the Fisher exact p-value, and `mcnemar_bounds` the exact McNemar p-values
+for the recall gaps. The comparison scripts do not persist per-question hit/miss lists,
+so a paired test cannot be computed directly from the saved files; `mcnemar_bounds`
+therefore reports the best case for each gap (all discordant pairs favoring the better
+method) and the next pattern out. A one-question gap cannot reach significance under
+any pattern (p = 1.0); the six-question gap to the coverage-only run reaches p = 0.031
+in the best case and p = 0.070 with a single discordant pair against it.
+
+## `miss_analysis.json`
+
+`pool_recall` is the share of questions whose gold passage reached the `n = 15`
+candidate pool — **18/18 on this benchmark**, so it is also the recall@5 ceiling for
+MMR, facility location, and reranking. `per_method` lists each method's missed `qid`s
+split by whether the gold passage was in the pool; because pool recall is perfect, every
+pool-based method's misses fall in `misses_with_gold_in_pool`, i.e. they are selection
+errors. `per_question` adds the gold passage's rank within the pool and the number of
+distinct IDs in the top-k set.
+
+Two things follow that are easy to get backwards. First, a pool-size caveat does not
+explain the diversity methods' results here. Second, top-k's four misses are passages
+that *were* in the pool but ranked 6–15, so a better selection rule had up to four
+questions of headroom over top-k available to it.
 
 ## Reading these numbers with care
 
@@ -106,9 +193,14 @@ the top-15.
   than 14 hits × 0.2 = 2.8, which pins it to exactly one hit question yielding only 3
   distinct ids instead of 5. Nothing else in the table is affected — `mmr` and
   `facility_location` totals match their hit counts exactly.
-- **Retrieved ids are not persisted.** Only the aggregate metrics and the answer text
-  are saved, so per-question hit/miss analysis requires a re-run
-  (`python retriever/retrieve.py` prints exactly that for the top-k baseline).
+- **Retrieved ids are mostly not persisted.** The comparison files save only the
+  aggregate metrics and the answer text, so per-question hit/miss analysis for top-k,
+  MMR, and reranking requires a re-run (`python retriever/retrieve.py` prints exactly
+  that for the top-k baseline). The two exceptions are weighted facility location:
+  `structural_analysis.json` records its per-question hit/miss and
+  `alpha_instrumentation.json` its selected IDs. This is why
+  `run_significance_tests.py` can run a real Fisher exact test on Table III but can
+  only bound the McNemar p-values for Table II.
 - **Re-runs are not byte-identical.** Retrieval is deterministic, but the generated
   answers are not; a new run overwrites the file in place. The earlier
   `baseline_week1.json` was removed rather than kept when the generator switched to
@@ -119,21 +211,25 @@ the top-15.
 Run from the project root — `retriever/retrieve.py` resolves `data/` and
 `retriever/` as relative paths.
 
-Build the FAISS index once (needed by both scripts):
+Build the FAISS index once (needed by every script that retrieves):
 
 ```bash
 python retriever/build_index.py
 ```
 
-Then regenerate either file:
+Then regenerate any file:
 
 ```bash
-python scripts/run_baseline.py
+python scripts/run_baseline.py              # code_baseline_week1.json
+python scripts/run_comparison.py            # week2_comparison.json
+python scripts/run_week3_comparison.py      # week3_full_comparison.json
+python scripts/run_structural_analysis.py   # structural_analysis.json
+python scripts/run_alpha_instrumentation.py # alpha_instrumentation.json
+python scripts/run_significance_tests.py    # significance_tests.json
 ```
 
-```bash
-python scripts/run_comparison.py
-```
-
-Generation calls Gemini, so `GOOGLE_API_KEY` must be set in `.env`
-(see `.env.example`).
+The first three call Gemini, so `GOOGLE_API_KEY` must be set in `.env`
+(see `.env.example`). The last three are retrieval- and arithmetic-only:
+`run_structural_analysis.py` and `run_alpha_instrumentation.py` need the FAISS index
+but no API key, and `run_significance_tests.py` needs neither — it reads the JSON
+files above.
