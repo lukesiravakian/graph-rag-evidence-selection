@@ -22,8 +22,8 @@ from selection.reranker import rerank_select
 from generator.generate import generate_answer_with_citations
 from eval.scorer import evaluate, compare_methods, citation_precision, check_hallucination
 
-DATA_DIR = Path("data")
-RESULTS_DIR = Path("results")
+DATA_DIR = PROJECT_ROOT / "data"
+RESULTS_DIR = PROJECT_ROOT / "results"
 DATA_PATH = DATA_DIR / "code_questions.jsonl"
 OUTPUT_PATH = RESULTS_DIR / "week3_full_comparison.json"
 
@@ -48,7 +48,13 @@ def mean(values: Sequence[float]) -> float:
 
 
 def select_passages(model: SentenceTransformer, question: str) -> dict[str, list[Passage]]:
-    """Run every selection strategy on the same question, in the order of METHODS."""
+    """
+    Run every selection strategy on the same question, in the order of METHODS.
+
+    Top-k reads the index directly; MMR, weighted facility location, and reranking
+    all choose their five passages from the same N = 15 candidate pool, so the
+    methods differ only in the selection rule.
+    """
     candidates: list[Passage] = retrieve_candidates(question, n=NUM_CANDIDATES)
 
     selections: dict[str, list[Passage]] = {}
@@ -96,6 +102,7 @@ def main() -> None:
 
     print(comparison)
 
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     with OUTPUT_PATH.open("w") as f:
         json.dump({
                 "comparison": comparison, 
