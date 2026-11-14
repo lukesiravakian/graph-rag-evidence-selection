@@ -1,12 +1,19 @@
-"""Evidence retrieval: select candidate passages for a question.
+"""Dense retrieval: the FAISS index and the two ways the pipeline reads from it.
 
 Public API
 ----------
 retrieve(question, k=5) -> list[dict]
-    Return the top-``k`` passages for ``question``.
+    The top-``k`` passages for ``question`` by cosine similarity. With ``k = 5``
+    this is the plain top-k baseline.
+retrieve_candidates(question, n=15) -> list[dict]
+    The ``n``-passage candidate pool that MMR, facility location, and reranking
+    all select from. A thin alias for ``retrieve(question, k=n)``, kept separate
+    so the pool size and the final budget stay distinguishable at call sites.
 
 Names are re-exported lazily (PEP 562), so ``import retriever`` stays cheap
-and side-effect free; submodules load on first attribute access.
+and side-effect free; submodules load on first attribute access. ``retriever.retrieve``
+loads the embedding model and the FAISS index at import time, so
+``python retriever/build_index.py`` must have been run once.
 """
 
 from __future__ import annotations
@@ -14,12 +21,12 @@ from __future__ import annotations
 from importlib import import_module
 from typing import TYPE_CHECKING, Any
 
-__all__ = ["retrieve"]
+__all__ = ["retrieve", "retrieve_candidates"]
 
-_LAZY_ATTRS = {"retrieve": "retrieve"}
+_LAZY_ATTRS = {"retrieve": "retrieve", "retrieve_candidates": "retrieve"}
 
 if TYPE_CHECKING:
-    from retriever.retrieve import retrieve
+    from retriever.retrieve import retrieve, retrieve_candidates
 
 
 def __getattr__(name: str) -> Any:
